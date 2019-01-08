@@ -12,6 +12,7 @@ type g struct {
 	// mysql
 	Mysql_username string
 	Mysql_password string
+	Mysql_ip string
 	Mysql_port int
 	Mysql_db string
 	// redis
@@ -37,6 +38,7 @@ func Initial(confFile string){
 	// Section = mysql
 	G.Mysql_username = cfg.Section("mysql").Key("username").String()
 	G.Mysql_password = cfg.Section("mysql").Key("password").String()
+	G.Mysql_ip = cfg.Section("mysql").Key("ip").String()
 	G.Mysql_port = cfg.Section("mysql").Key("port").MustInt()
 	G.Mysql_db = cfg.Section("mysql").Key("db").String()
 
