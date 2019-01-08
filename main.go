@@ -5,7 +5,7 @@ import (
 	"./database"
 	"./conf"
 	"fmt"
-	"scaffold_go/utils/util"
+	"./utils/util"
 )
 
 type Product struct {
@@ -18,6 +18,7 @@ func main() {
 	G := conf.GetConf()
 	fmt.Println(G.Mysql_username)
 	dsn := util.GetDsn()
+	fmt.Println("xx  ",conf.G.Mysql_username)
 	db, err := gorm.Open("mysql", dsn)
 	if err != nil {
 		panic("failed to connect database")
