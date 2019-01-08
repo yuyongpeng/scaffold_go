@@ -7,11 +7,7 @@ import (
 	"log"
 	"fmt"
 	"time"
-<<<<<<< HEAD
 	)
-=======
-)
->>>>>>> 9f14ac8fb24acb5ef6109d89b707ec0be64a4e18
 
 type MysqlConnectPool struct {
 
