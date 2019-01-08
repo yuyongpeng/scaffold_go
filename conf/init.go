@@ -24,7 +24,7 @@ var G = &g{}
 /**
 将配置文件的数据写入全局变量中
  */
- func Initial(confFile string){
+func Initial(confFile string){
 	cfg,err := ini.Load(confFile)
 	if err != nil{
 		fmt.Println("Fail to read file :", confFile)
