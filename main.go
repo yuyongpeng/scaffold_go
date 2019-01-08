@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package main
 import (
 	"github.com/jinzhu/gorm"
@@ -41,3 +42,6 @@ func main() {
 	gdb.AutoMigrate(&database.Email{})
 
 	}
+=======
+package scaffold_go
+>>>>>>> 9f14ac8fb24acb5ef6109d89b707ec0be64a4e18

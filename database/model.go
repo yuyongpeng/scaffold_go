@@ -1,4 +1,5 @@
 package database
+<<<<<<< HEAD
 
 import (
 "database/sql"
@@ -51,3 +52,5 @@ type CreditCard struct {
 	UserID  uint
 	Number  string
 }
+=======
+>>>>>>> 9f14ac8fb24acb5ef6109d89b707ec0be64a4e18
