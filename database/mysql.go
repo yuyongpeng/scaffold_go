@@ -7,7 +7,7 @@ import (
 	"log"
 	"fmt"
 	"time"
-	"../utils/util"
+	"scaffold_go/utils/util"
 		)
 
 type MysqlConnectPool struct {

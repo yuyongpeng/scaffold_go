@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"../../conf"
+	"scaffold_go/conf"
 	"reflect"
 	"strconv"
 )
