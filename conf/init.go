@@ -9,6 +9,9 @@ import (
 type g struct {
 	// global
 	Global_key string
+	// logger
+	Formater string
+	Log string
 	// mysql
 	Mysql_username string
 	Mysql_password string
@@ -34,6 +37,10 @@ func Initial(confFile string){
 
 	// Section = global
 	G.Global_key = cfg.Section("").Key("global_key").String()
+
+	// Section = log
+	G.Formater = cfg.Section("log").Key("formater").String()
+	G.Log = cfg.Section("log").Key("log").String()
 
 	// Section = mysql
 	G.Mysql_username = cfg.Section("mysql").Key("username").String()

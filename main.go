@@ -1,13 +1,13 @@
 package main
+
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"scaffold_go/database"
 	"scaffold_go/conf"
-	"fmt"
+	"scaffold_go/database"
+	"scaffold_go/log"
 	"scaffold_go/utils/util"
 )
-
 type Product struct {
 	gorm.Model
 	Code string
@@ -15,10 +15,10 @@ type Product struct {
 }
 func main() {
 	conf.Initial("./conf.ini")
-	G := conf.GetConf()
-	fmt.Println(G.Mysql_username)
+	var logger = log.New()
+	logger.Info("xxxxxxxxxxxxxxxx")
+	logger.Info("yyyyyyyy")
 	dsn := util.GetDsn()
-	fmt.Println("xx  ",conf.G.Mysql_username)
 	db, err := gorm.Open("mysql", dsn)
 	if err != nil {
 		panic("failed to connect database")
