@@ -1,39 +1,42 @@
 package main
 
 import (
+	"flag"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"scaffold_go/conf"
 	"scaffold_go/database"
 	"scaffold_go/log"
-	"scaffold_go/utils/util"
 )
 type Product struct {
 	gorm.Model
 	Code string
 	Price int
 }
+
+var param_test1 string
+
+/**
+获得命令行传递的参数
+ */
+func init(){
+	flag.StringVar(&param_test1, "test1", "none", "help message for test1")
+	flag.Parse()
+}
+
 func main() {
+	// 初始化配置信息
 	conf.Initial("./conf.ini")
-	var logger = log.New()
-	logger.Info("xxxxxxxxxxxxxxxx")
-	logger.Info("yyyyyyyy")
-	dsn := util.GetDsn()
-	db, err := gorm.Open("mysql", dsn)
-	if err != nil {
-		panic("failed to connect database")
-	}
-	defer db.Close()
-	db.AutoMigrate(&Product{})
+	// log 的输出
+	// TODO: 目前还有问题，没有办法使用全局变量。每一次实例化都会生成一个对象
+	logger := log.New()
+	logger.Info("1111111")
 
-	db.Create(&Product{Code:"124", Price: 12})
+	// 命令行参数的获得
+	logger.Info("param: " + param_test1)
+	conf.AddParam(param_test1)
+	logger.Info(conf.GetConf().Param_test1)
 
-	var product Product
-	db.First(&product, 1)
-	db.First(&product, "code=?", "124")
-
-	db.Model(&product).Update("Price", 2000)
-	db.Delete(&product)
 
 	instance := database.GetInstence()
 	conPool := instance.InitDbPool()

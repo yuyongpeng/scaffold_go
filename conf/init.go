@@ -7,17 +7,25 @@ import (
 )
 
 type g struct {
+	// 命令行参数
+	Param_test1 string
+
+
+
 	// global
 	Global_key string
 	// logger
 	Formater string
 	Log string
+	Loglevel string
+
 	// mysql
 	Mysql_username string
 	Mysql_password string
 	Mysql_ip string
 	Mysql_port int
 	Mysql_db string
+
 	// redis
 	Redis_username string
 	Redis_password string
@@ -41,6 +49,7 @@ func Initial(confFile string){
 	// Section = log
 	G.Formater = cfg.Section("log").Key("formater").String()
 	G.Log = cfg.Section("log").Key("log").String()
+	G.Loglevel = cfg.Section("log").Key("Loglevel").String()
 
 	// Section = mysql
 	G.Mysql_username = cfg.Section("mysql").Key("username").String()
@@ -55,6 +64,13 @@ func Initial(confFile string){
 	G.Redis_port = cfg.Section("redis").Key("port").MustInt()
 
 }
+/**
+将命令行获得的数据写入全局变量中
+ */
+func AddParam(param_test1 string){
+	G.Param_test1 = param_test1
+}
+
 
 /**
 获得全局配置信息

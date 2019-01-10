@@ -3,13 +3,12 @@ package database
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/sirupsen/logrus"
 	"sync"
-	"log"
-	"fmt"
-	"time"
+	"scaffold_go/log"
 	"scaffold_go/utils/util"
-	)
-
+	"time"
+)
 type MysqlConnectPool struct {
 
 }
@@ -17,6 +16,9 @@ var once sync.Once
 var instence *MysqlConnectPool
 var gdb *gorm.DB
 var err_db error
+
+//var logger = log.New()
+var logger *logrus.Logger = log.New()
 
 func GetInstence() *MysqlConnectPool {
 	once.Do(func(){
@@ -26,11 +28,12 @@ func GetInstence() *MysqlConnectPool {
 }
 
 func (m *MysqlConnectPool) InitDbPool() (sucess bool){
+	//var logger = log.New()
+	logger.Info("mysql database")
 	dsn := util.GetDsn()
 	db, err_db := gorm.Open("mysql", dsn)
-	fmt.Println(err_db)
 	if err_db != nil {
-		log.Fatal(err_db)
+		//log.Fatal(err_db)
 		return false
 	}
 	gdb = db
