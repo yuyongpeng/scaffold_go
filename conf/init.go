@@ -10,8 +10,6 @@ type g struct {
 	// 命令行参数
 	Param_test1 string
 
-
-
 	// global
 	Global_key string
 	// logger

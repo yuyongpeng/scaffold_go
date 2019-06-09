@@ -13,13 +13,13 @@ var Log *logrus.Logger = logrus.New()
 func New()(lg *logrus.Logger){
 	log := logrus.New()
 	G := conf.GetConf()
-	log.SetOutput(os.Stdout)
-	//file, err := os.OpenFile(G.Log, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	//if err == nil {
-	//	log.SetOutput(file)
-	//} else {
-	//	log.Info("Failed to log to file, using default stderr")
-	//}
+	//log.SetOutput(os.Stdout)
+	file, err := os.OpenFile(G.Log, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err == nil {
+		log.SetOutput(file)
+	} else {
+		log.Info("Failed to log to file, using default stderr")
+	}
 	fmt.Println(G.Formater)
 	if G.Formater == "text"{
 		log.SetFormatter(&logrus.JSONFormatter{})
