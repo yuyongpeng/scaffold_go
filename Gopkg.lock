@@ -2,14 +2,6 @@
 
 
 [[projects]]
-  digest = "1:b520b55fc1146c5b0eea03b07233f7a3d4a9be985c037c91ea6b82ecb81bd521"
-  name = "github.com/bitly/go-simplejson"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "aabad6e819789e569bd6aabf444c935aa9ba1e44"
-  version = "v0.5.0"
-
-[[projects]]
   digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
@@ -120,14 +112,6 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
-  name = "github.com/pkg/errors"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
-  version = "v0.8.1"
-
-[[projects]]
   digest = "1:04457f9f6f3ffc5fea48e71d62f2ca256637dee0a04d710288e27e05c8b41976"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
@@ -184,6 +168,7 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "b5bf975e5823809fb22c7644d008757f78a4259e"
+  source = "github.com/spf13/viper"
   version = "v1.4.0"
 
 [[projects]]
@@ -237,16 +222,16 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/bitly/go-simplejson",
+    "github.com/fsnotify/fsnotify",
     "github.com/go-ini/ini",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/mysql",
     "github.com/mitchellh/go-homedir",
-    "github.com/pkg/errors",
     "github.com/sirupsen/logrus",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
     "github.com/urfave/cli",
+    "github.com/elastic/go-elasticsearch",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

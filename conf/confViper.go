@@ -11,12 +11,8 @@ package conf
 import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"scaffold_go/log"
 )
-
-var logger *logrus.Logger = log.Log
 
 /**
 通过viper变量的方式来获得数据
@@ -38,14 +34,14 @@ func init(){
 	if CONF_WATCHING {
 		Vp.WatchConfig()
 		viper.OnConfigChange(func(e fsnotify.Event) {
-			logger.WithField("FieldName", e.Name).Info("Config file changed")
+			fmt.Printf("Config file changed: %s", e.Name)
 		})
 	}
 	err := Vp.ReadInConfig() 	// Find and read the config file
 	if err != nil { 			// Handle errors reading the config file
-		//panic(fmt.Errorf("Fatal error config file: %s \n", err))
-		logger.Panic("Fatal error config file: %s", err)
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
+	Vp.Unmarshal(&Cfg)
 }
 
 func getViper() (vp *viper.Viper){
@@ -71,8 +67,6 @@ func getViper() (vp *viper.Viper){
 	}
 }
 
-
-
 /**
 通过反序列化的方式直接变为一个结构体的对象
 import "scaffold_go/conf"
@@ -83,8 +77,8 @@ var Cfg CfgStruct = CfgStruct{}
 
 // 将配置文件转换为一个结构体的变量
 func NewVp(){
-	//vp := getViper()
 	Vp.Unmarshal(&Cfg)
+	//fmt.Println(Cfg)
 }
 
 

@@ -30,12 +30,26 @@ type CfgStruct struct{
 	Age int					`mapstructure:"age"`
 	Eyes string				`mapstructure:"eyes"`
 	Beard bool				`mapstructure:"beard"`
+	Mysql Mysql				`mapstructure:"mysql"`
 }
+type Mysql struct{
+	Username string			`mapstructure:"userame"`
+	Password string			`mapstructure:"password"`
+	Ip string				`mapstructure:"ip"`
+	Port string				`mapstructure:"port"`
+	Database string			`mapstructure:"database"`
+	Param string			`mapstructure:"param"`
+	Maxidleconns int 		`mapstructure:"maxidleconns"`
+	Maxopenconns int		`mapstructure:"maxopenconns"`
+	Connmaxlifetime int64	`mapstructure:"connmaxlifetime"`
+}
+
+
 
 // 日志的格式化输出 "json" 和 "text", 填写错误,默认使用json
 var LOG_FORMATER = "text"
 // 日志的输出 "console(os.Stderr)" "file", 填写错误,默认使用console
-var LOG_OUTPUT = "file"
+var LOG_OUTPUT = "console"
 // 文件日志的路径
 var LOG_OUTPUT_FILE = "/tmp/" + APP_NAME + ".log"
 // 设置日志的级别 "trace" "debug" "info" "warn" "error" "fatal" "panic", 填写错误,默认使用info

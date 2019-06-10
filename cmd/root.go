@@ -72,7 +72,7 @@ var initCmd = &cobra.Command{
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	//cobra.OnInitialize(initConfig)
 	rootCmd.AddCommand(addCmd)
 	rootCmd.AddCommand(initCmd)
 
@@ -115,11 +115,11 @@ func initConfig() {
 }
 
 func Execute() {
-	home, _ := homedir.Dir()
-	fmt.Println(home)
-	//if err := rootCmd.Execute(); err != nil {
-	//	fmt.Println(err)
-	//	os.Exit(1)
-	//}
+	//home, _ := homedir.Dir()
+	//fmt.Println(home)
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 

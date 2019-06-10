@@ -10,3 +10,14 @@ clothing:
 age: 35
 eyes : brown
 beard: true
+
+mysql:
+  userame: root
+  password: 1q2w3e4r
+  ip: 127.0.0.1
+  port: 3306
+  database: scaffold
+  param: charset=utf8mb4&parseTime=True&loc=Local
+  maxidleconns: 5                # 保持连接的数量
+  maxopenconns: 20               # 最大的连接数
+  connmaxlifetime: 3600000000000 # 每个连接保持的时间 1小时。60 * 60 * 1000 * 1000 * 1000
