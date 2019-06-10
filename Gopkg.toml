@@ -25,6 +25,30 @@
 #   unused-packages = true
 
 
+# 必需包
+required = ["github.com/spf13/viper", "github.com/spf13/cobra", "github.com/go-ini/ini", "github.com/jinzhu/gorm"]
+# 忽略包
+ignored = []
+# 项目元数据
+[metadata]
+homepage = "https://github.com/yuyongpeng/scaffold_go"
+license = "MIT"
+owners_name_1 = "yuyongpeng"
+owners_email_1 = "yuyongpeng@hotmail.com"
+owners_homepage_1 = "https://github.com/yuyongpeng"
+
+# 约束条件
+[[constraint]]
+  name = "github.com/spf13/viper"
+  # 可选：版本
+  version = "=1.4.0"
+  # 分支
+  #branch = "master"
+  # 修订
+  #revision = "beego 1.8.0"
+  # 可选：指定来源
+  source = "github.com/spf13/viper"
+
 [[constraint]]
   name = "github.com/go-ini/ini"
   version = "1.41.0"
@@ -33,10 +57,11 @@
   name = "github.com/jinzhu/gorm"
   version = "1.9.2"
 
+[[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.5"
+
 [prune]
   go-tests = true
   unused-packages = true
 
-[[constraint]]
-  name = "github.com/spf13/cobra"
-  version = "0.0.5"
