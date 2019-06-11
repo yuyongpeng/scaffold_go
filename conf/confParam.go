@@ -31,6 +31,7 @@ type CfgStruct struct{
 	Eyes string				`mapstructure:"eyes"`
 	Beard bool				`mapstructure:"beard"`
 	Mysql Mysql				`mapstructure:"mysql"`
+	Iris Iris				`mapstructure:"iris"`
 }
 type Mysql struct{
 	Username string			`mapstructure:"userame"`
@@ -43,7 +44,10 @@ type Mysql struct{
 	Maxopenconns int		`mapstructure:"maxopenconns"`
 	Connmaxlifetime int64	`mapstructure:"connmaxlifetime"`
 }
-
+type Iris struct {
+	Html string 			`mapstructure:"html"`
+	Upload string 			`mapstructure:"upload"`
+}
 
 
 // 日志的格式化输出 "json" 和 "text", 填写错误,默认使用json

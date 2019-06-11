@@ -1,0 +1,33 @@
+Hacker: true
+name: steve1
+hobbies:
+  - skateboarding
+  - snowboarding
+  - go
+clothing:
+  jacket: leather
+  trousers: denim
+age: 35
+eyes: brown
+beard: true
+
+mysql:
+  userame: root
+  password: 1q2w3e4r
+  ip: 127.0.0.1
+  port: 3306
+  database: scaffold
+  param: charset=utf8mb4&parseTime=True&loc=Local
+  maxidleconns: 5                # 保持连接的数量
+  maxopenconns: 20               # 最大的连接数
+  connmaxlifetime: 3600000000000 # 每个连接保持的时间 1小时。60 * 60 * 1000 * 1000 * 1000
+
+elastic:
+  addresses:
+    - http://localhost:9200
+    - http://localhost:9201
+  MaxIdleConnsPerHost:
+
+iris:
+  web: /Users/yuyongpeng/gopath/src/scaffold_go/web/views
+  upload: /Users/yuyongpeng/gopath/src/scaffold_go/uploads/

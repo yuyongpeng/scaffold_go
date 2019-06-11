@@ -27,3 +27,7 @@ elastic:
     - http://localhost:9200
     - http://localhost:9201
   MaxIdleConnsPerHost:
+
+iris:
+  web: /Users/yuyongpeng/gopath/src/scaffold_go/web/views
+  upload: /Users/yuyongpeng/gopath/src/scaffold_go/uploads/

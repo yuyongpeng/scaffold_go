@@ -47,7 +47,7 @@ func init(){
 func getViper() (vp *viper.Viper){
 	Vp.SetConfigName(CONF_FILE)          // 设定配置文件的名称（不包括后缀）
 	for _, path := range CONF_SEARCH_PATH {
-		//fmt.Println(path)
+		fmt.Println(path)
 		Vp.AddConfigPath(path)
 	}
 	Vp.SetConfigType(CONF_FILE_TYPE) // 设定配置文件的格式： yaml
