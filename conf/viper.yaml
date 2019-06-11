@@ -1,14 +1,14 @@
 Hacker: true
 name: steve1
 hobbies:
-- skateboarding
-- snowboarding
-- go
+  - skateboarding
+  - snowboarding
+  - go
 clothing:
   jacket: leather
   trousers: denim
 age: 35
-eyes : brown
+eyes: brown
 beard: true
 
 mysql:
@@ -21,3 +21,9 @@ mysql:
   maxidleconns: 5                # 保持连接的数量
   maxopenconns: 20               # 最大的连接数
   connmaxlifetime: 3600000000000 # 每个连接保持的时间 1小时。60 * 60 * 1000 * 1000 * 1000
+
+elastic:
+  addresses:
+    - http://localhost:9200
+    - http://localhost:9201
+  MaxIdleConnsPerHost:
