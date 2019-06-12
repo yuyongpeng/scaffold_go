@@ -50,7 +50,7 @@ type Language struct {
 	Code string `gorm:"index:idx_name_code"` // `unique_index` also works
 }
 
-
+////////////////////////// [table: creditcard] //////////////////////////
 /**
 CREATE TABLE `creditcard` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -58,11 +58,11 @@ CREATE TABLE `creditcard` (
   `number` varchar(100) COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
- */
+*/
 type Model struct {
-	ID        uint `gorm:"primary_key"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        uint       `gorm:"primary_key"`
+	CreatedAt time.Time  `gorm:"type:datetime;Column:createat"`
+	UpdatedAt time.Time  `gorm:"type:datetime;Column:updateat"`
 	DeletedAt *time.Time `sql:"index"`
 }
 type CreditCard struct {
@@ -71,6 +71,20 @@ type CreditCard struct {
 	UserID uint   `gorm:"type:int;Column:userid"`
 	Number string `gorm:"type:varchar(100);Column:number"`
 }
+
 func (CreditCard) TableName() string {
 	return "creditcard"
+}
+
+////////////////////////// [table: cp_soldier] //////////////////////////
+type Soldier struct {
+	Id               int       `gorm:"type:int(10);column:id;AUTO_INCREMENT;NOT NULL;UNIQUE"`
+	Encrypted_string string    `gorm:"type:varchar(700);Column:encrypted_string;NOT NULL;UNIQUE"`
+	Verification_num int       `gorm:"type:int(11);Column:verification_num;default:0"`
+	Update_time      time.Time `gorm:"type:datetime;Column:update_time"`
+	Create_time      time.Time `gorm:"type:datetime;Column:create_time"`
+}
+
+func (Soldier) TableName() string {
+	return "cp_soldiers"
 }

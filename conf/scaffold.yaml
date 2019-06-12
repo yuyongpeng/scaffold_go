@@ -18,7 +18,7 @@ beard: true
 
 
 # 设置当前的环境，不同的环境读取不同的配置(default, develop, release, online)
-environment: default
+environment: develop
 
 # 目前支持支 mysql 数据库
 database:

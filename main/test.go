@@ -13,7 +13,10 @@
 //	fmt.Println(home2)
 //}
 package main
-import "regexp"
+
+import (
+	"regexp"
+)
 import "fmt"
 import "reflect"
 
@@ -28,7 +31,6 @@ func main(){
 
 	value := 32 << 20
 	fmt.Println(reflect.TypeOf(value))
-
 }
 
 

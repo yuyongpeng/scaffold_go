@@ -12,27 +12,19 @@
      \/__/         \/__/         \/__/
 Author:       yuyongpeng@hotmail.com
 Github:       https://github.com/yuyongpeng/
-Date:         2019-06-12 07:57:29
+Date:         2019-06-12 12:56:38
 LastEditors:
-LastEditTime: 2019-06-12 07:57:29
-Description:
+LastEditTime: 2019-06-12 12:56:38
+Description: 处理iris的数据
 */
-package upload
+package service
 
-var Body = `
-<html>
-<head>
-    <title>Upload file</title>
-</head>
-<body>
-<h1>请将退役士兵的数据导入数据库中：</h1>
-<form enctype="multipart/form-data" action="http://127.0.0.1:8085/upload" method="POST">
-    <input type="file" name="uploadfile" />
+import "scaffold_go/file"
 
-    <input type="hidden" name="token" value="{{.}}" />
-
-    <input type="submit" value="upload" />
-</form>
-</body>
-</html>
-`
+/**
+将 CSV 文件解析后导入到数据库中
+ */
+func CsvService(csvFile string) (errorLine []string, success int) {
+	errorLine, success, _ = file.ReadFile(csvFile, file.PaseCsvToMysql)
+	return errorLine, success
+}

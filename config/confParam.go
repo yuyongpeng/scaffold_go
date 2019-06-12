@@ -33,7 +33,7 @@ type CfgStruct struct {
 	//////////////////////////////////////////////////////////
 	Environment string           `mapstructure:"environment"`
 	Iris        Iris             `mapstructure:"iris"`
-	Database    map[string]Mysql `mapstructure:"test"`
+	Database    map[string]Mysql `mapstructure:"database"`
 }
 type Mysql struct {
 	Username        string `mapstructure:"userame"`
