@@ -13,6 +13,7 @@ import (
 	"encoding/csv"
 	"io"
 	"os"
+	"regexp"
 	"scaffold_go/crypto"
 	"scaffold_go/database"
 	"scaffold_go/errors"
@@ -76,12 +77,20 @@ func PaseCsvToMysql(line string) (encryptedString string, e error) {
 	ioreader := strings.NewReader(line)
 	reader := csv.NewReader(ioreader)
 	if recorde, er := reader.Read(); er == nil {
+		if len(recorde) != 6 {
+			return line, &errors.StatusError{Id: 1006}
+		}
 		name := recorde[0]
 		id_number := recorde[1]
 		birth_date := recorde[2]
 		major := recorde[3]
 		arms := recorde[4]
 		demobilized_number := recorde[5]
+		// 匹配日期的格式：1981-09-08
+		if success,_ := regexp.MatchString("[0-9]{4}-[0-9]{2}-[0-9]{2}", birth_date); !success {
+			return line, &errors.StatusError{Id: 1007}
+		}
+
 		encryptedString = strings.Join([]string{name, id_number, birth_date, major, arms, demobilized_number}, "")
 		hash := crypto.GetKeccakHash(encryptedString)
 		crud := &database.Crud{}

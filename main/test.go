@@ -16,6 +16,7 @@ package main
 
 import (
 	"regexp"
+	"strings"
 )
 import "fmt"
 import "reflect"
@@ -31,6 +32,8 @@ func main(){
 
 	value := 32 << 20
 	fmt.Println(reflect.TypeOf(value))
+
+	fmt.Println(strings.ToLower("aaaAAAA"))
 }
 
 

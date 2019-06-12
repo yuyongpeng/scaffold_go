@@ -84,14 +84,22 @@ func main() {
 	//处理来自upload_form.html的请求数据处理
 	app.Post("/upload", iris.LimitRequestBodySize(maxSize+1<<20), func(ctx iris.Context) {
 		// Get the file from the request.
-		file, _, err := ctx.FormFile("uploadfile")
+		file, info, err := ctx.FormFile("uploadfile")
 		if err != nil {
 			ctx.StatusCode(iris.StatusInternalServerError)
 			ctx.HTML("Error while uploading: <b>" + err.Error() + "</b>")
 			return
 		}
 		defer file.Close()
-		//fname := info.Filename
+		fname := info.Filename
+		fnameSplit := strings.Split(fname, ".")
+		var ext string = fnameSplit[len(fnameSplit)-1]
+		if len(fnameSplit) == 1 || strings.ToLower(ext) != "csv"{
+			ctx.HTML("<h1>您上传的文件格式不对，请重新上传（我们只接受 CSV 格式的文件）<h1> <a href='/upload'>上传文件</a>")
+			return
+		}
+
+		fmt.Println(fname)
 		//创建一个具有相同名称的文件
 		//假设你有一个名为'uploads'的文件夹
 		randomStr := utils.Krand(16, utils.KC_RAND_KIND_ALL)

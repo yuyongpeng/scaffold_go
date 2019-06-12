@@ -33,6 +33,8 @@ var StatusMsg = map[int]string{
 	1003: "请求没有响应",
 	1004: "CSV解析错误",
 	1005: "数据插入数据库失败",
+	1006: "CSV的字段长度不对",
+	1007: "日期格式不对",
 }
 
 func NewStatusError(errorNum int) error {
