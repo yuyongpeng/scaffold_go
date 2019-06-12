@@ -1,0 +1,85 @@
+########################################################
+################## 用于viper的测试 ######################
+########################################################
+Hacker: true
+name: steve1
+hobbies:
+  - skateboarding
+  - snowboarding
+  - go
+clothing:
+  jacket: leather
+  trousers: denim
+age: 35
+eyes: brown
+beard: true
+########################################################
+########################################################
+
+
+# 设置当前的环境，不同的环境读取不同的配置(default, develop, release, online)
+environment: default
+
+# 目前支持支 mysql 数据库
+database:
+  default:
+    userame: root
+    password: 1q2w3e4r
+    ip: 127.0.0.1
+    port: 3306
+    database: scaffold
+    param: charset=utf8mb4&parseTime=True&loc=Local
+    maxidleconns: 5                # 保持连接的数量
+    maxopenconns: 20               # 最大的连接数
+    connmaxlifetime: 3600000000000 # 每个连接保持的时间 1小时。60 * 60 * 1000 * 1000 * 1000
+  develop:
+    userame: root
+    password: hard-chain2017
+    ip: 106.75.2.31
+    port: 3306
+    database: soldier
+    param: charset=utf8mb4&parseTime=True&loc=Local
+    maxidleconns: 5                # 保持连接的数量
+    maxopenconns: 20               # 最大的连接数
+    connmaxlifetime: 3600000000000 # 每个连接保持的时间 1小时。60 * 60 * 1000 * 1000 * 1000
+  release:
+    userame: root
+    password: hard-chain2017
+    ip: 106.75.2.31
+    port: 3306
+    database: soldier
+    param: charset=utf8mb4&parseTime=True&loc=Local
+    maxidleconns: 5                # 保持连接的数量
+    maxopenconns: 20               # 最大的连接数
+    connmaxlifetime: 3600000000000 # 每个连接保持的时间 1小时。60 * 60 * 1000 * 1000 * 1000
+
+elastic:
+  addresses:
+    - http://localhost:9200
+    - http://localhost:9201
+  MaxIdleConnsPerHost:
+
+iris:
+  web: /Users/yuyongpeng/gopath/src/scaffold_go/web/views
+  upload: /Users/yuyongpeng/gopath/src/scaffold_go/uploads/
+  DisableStartupLog:                 false
+  DisableInterruptHandler:           false
+  DisablePathCorrection:             false
+  EnablePathEscape:                  false
+  FireMethodNotAllowed:              false
+  DisableBodyConsumptionOnUnmarshal: false
+  DisableAutoFireStatusCode:         false
+  TimeFormat:                        "Mon, Jan 02 2006 15:04:05 GMT"
+  Charset:                           "UTF-16"
+
+  #PostMaxMemoryisforpostbodymaxmemory.
+  #
+  #Therequestbodythesizelimit
+  #canbesetbythemiddleware`LimitRequestBodySize`
+  #or`context#SetMaxRequestBodySize`.
+  PostMaxMemory:               33554432  # 32 << 20 = 32 * 1024 * 1024  =  32MB
+  TranslateFunctionContextKey: "iris.translate"
+  TranslateLanguageContextKey: "iris.language"
+  ViewLayoutContextKey:        "iris.viewLayout"
+  ViewDataContextKey:          "iris.viewData"
+  EnableOptimizations:         false

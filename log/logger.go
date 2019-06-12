@@ -3,7 +3,7 @@ package log
 import (
 	"github.com/sirupsen/logrus"
 	"os"
-	"scaffold_go/conf"
+	"scaffold_go/config"
 )
 
 var Log *logrus.Logger
@@ -12,9 +12,9 @@ func init() {
 	Log = logrus.New()
 
 	// 设置日志的输出
-	switch conf.LOG_OUTPUT {
+	switch config.LOG_OUTPUT {
 	case "file":
-		file, err := os.OpenFile(conf.LOG_OUTPUT_FILE, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		file, err := os.OpenFile(config.LOG_OUTPUT_FILE, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err == nil {
 			Log.Out = file
 		} else {
@@ -28,7 +28,7 @@ func init() {
 	}
 
 	// 设置日志的格式
-	switch conf.LOG_FORMATER {
+	switch config.LOG_FORMATER {
 	case "json":
 		Log.SetFormatter(&logrus.JSONFormatter{})
 	case "text":
@@ -38,7 +38,7 @@ func init() {
 	}
 
 	// 设置日志的输出级别
-	switch conf.LOG_LEVEL {
+	switch config.LOG_LEVEL {
 	case "trace":
 		Log.SetLevel(logrus.TraceLevel)
 	case "debug":

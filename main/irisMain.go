@@ -25,19 +25,25 @@ import (
 	"github.com/kataras/iris"
 	"io"
 	"os"
-	"scaffold_go/conf"
+	"scaffold_go/config"
+	"scaffold_go/web/views/upload"
 	"strconv"
 	"time"
 )
 
 const maxSize = 5 << 20 // 5MB
 
+
 func main() {
-	//conf.NewVp()
-	fmt.Println(conf.Cfg.Iris.Html)
 
 	app := iris.New()
-	app.RegisterView(iris.HTML(conf.Cfg.Iris.Html, ".html"))
+	app.RegisterView(iris.HTML(config.Cfg.Iris.Html, ".html"))
+	fmt.Println(config.Cfg)
+	// 初始化Iris的配置
+	configuration := config.InitIrisConfiguration()
+	iris.WithConfiguration(configuration)
+
+
 	//将upload_form.html提供给客户端。
 	app.Get("/upload", func(ctx iris.Context) {
 		//创建一个令牌（可选）。
@@ -46,12 +52,15 @@ func main() {
 		io.WriteString(h, strconv.FormatInt(now, 10))
 		token := fmt.Sprintf("%x", h.Sum(nil))
 		//使用令牌渲染表单以供您使用。
-		//ctx.ViewData(""，token)
+		ctx.ViewData("", token)
 		//或者在`View`方法中添加第二个参数。
 
 		//令牌将作为{{.}}传递到模板中。
 
-		ctx.View("/upload/upload_form.html", token)
+		//ctx.View("/upload/upload_form.html", token)
+		//ctx.ViewData(Body, token)
+		//web.Body
+		ctx.HTML(upload.Body)
 	})
 	//处理来自upload_form.html的请求数据处理
 	app.Post("/upload", iris.LimitRequestBodySize(maxSize+1<<20), func(ctx iris.Context) {
@@ -66,7 +75,7 @@ func main() {
 		fname := info.Filename
 		//创建一个具有相同名称的文件
 		//假设你有一个名为'uploads'的文件夹
-		out, err := os.OpenFile(conf.Cfg.Iris.Upload+fname,
+		out, err := os.OpenFile(config.Cfg.Iris.Upload+fname,
 			os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			ctx.StatusCode(iris.StatusInternalServerError)

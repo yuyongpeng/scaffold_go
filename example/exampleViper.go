@@ -10,12 +10,12 @@ package main
 
 import (
 	"fmt"
-	"scaffold_go/conf"
+	"scaffold_go/config"
 )
 
 func main() {
-	conf.NewVp()
-	fmt.Printf("ddd:%s", conf.Cfg.Name)
-	cfg := conf.Cfg
+	config.NewVp()
+	fmt.Printf("ddd:%s", config.Cfg.Name)
+	cfg := config.Cfg
 	fmt.Printf("name : %s", cfg.Mysql.Username)
 }

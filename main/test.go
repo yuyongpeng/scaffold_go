@@ -15,6 +15,7 @@
 package main
 import "regexp"
 import "fmt"
+import "reflect"
 
 func main(){
 	re := regexp.MustCompile("[0-9]*([a-z]+)[0-9]*([a-z]+)")
@@ -24,6 +25,10 @@ func main(){
 	reg := regexp.MustCompile(`(?P<aa>\w)(\w)+`)
 	rt := reg.FindAllStringSubmatch("Hello World!", -1)
 	fmt.Printf("%q", rt)  // [["Hello" "H" "o"] ["World" "W" "d"]]
+
+	value := 32 << 20
+	fmt.Println(reflect.TypeOf(value))
+
 }
 
 

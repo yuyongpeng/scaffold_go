@@ -11,7 +11,7 @@ package test
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"scaffold_go/conf"
+	"scaffold_go/config"
 )
 
 var v = viper.New()
@@ -22,12 +22,12 @@ func GetViperPro(){
 }
 
 func Test(){
-	vp := conf.Vp
+	vp := config.Vp
 	name := vp.Get("name")
 	fmt.Printf("xxxxx: %s", name)
 }
 
 func main(){
-	var G = conf.G
+	var G = config.G
 	fmt.Println(G.Formater)
 }
