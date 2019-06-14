@@ -23,17 +23,18 @@ var CONF_WATCHING = false
 // 配置文件的结构体
 // 配置文件和这个结构体是一一对应的，配置文件有修改，只需要对应的变更这个结构体即可
 type CfgStruct struct {
-	Hacker      bool             `mapstructure:"Hacker"`
-	Name        string           `mapstructure:"name"`
-	Hhobbies    []string         `mapstructure:"hobbies"`
-	Clothing    interface{}      `mapstructure:"clothing"`
-	Age         int              `mapstructure:"age"`
-	Eyes        string           `mapstructure:"eyes"`
-	Beard       bool             `mapstructure:"beard"`
+	Hacker   bool        `mapstructure:"Hacker"`
+	Name     string      `mapstructure:"name"`
+	Hhobbies []string    `mapstructure:"hobbies"`
+	Clothing interface{} `mapstructure:"clothing"`
+	Age      int         `mapstructure:"age"`
+	Eyes     string      `mapstructure:"eyes"`
+	Beard    bool        `mapstructure:"beard"`
 	//////////////////////////////////////////////////////////
 	Environment string           `mapstructure:"environment"`
 	Iris        Iris             `mapstructure:"iris"`
 	Database    map[string]Mysql `mapstructure:"database"`
+	Elastic     Elastic          `mapstructure:"elastic"`
 }
 type Mysql struct {
 	Username        string `mapstructure:"userame"`
@@ -64,6 +65,11 @@ type Iris struct {
 	ViewLayoutContextKey              string `mapstructure:"ViewLayoutContextKey"`
 	ViewDataContextKey                string `mapstructure:"ViewDataContextKey"`
 	EnableOptimizations               bool   `mapstructure:"EnableOptimizations"`
+}
+
+type Elastic struct {
+	Addresses           []string `mapstructure:"address"`
+	MaxIdleConnsPerHost int      `mapstructure:"MaxIdleConnsPerHost"`
 }
 
 // 日志的格式化输出 "json" 和 "text", 填写错误,默认使用json

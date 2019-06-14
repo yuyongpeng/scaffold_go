@@ -35,6 +35,7 @@ var StatusMsg = map[int]string{
 	1005: "数据插入数据库失败",
 	1006: "CSV的字段长度不对",
 	1007: "日期格式不对",
+	1008: "职位信息插入elasticsearch失败",
 }
 
 func NewStatusError(errorNum int) error {

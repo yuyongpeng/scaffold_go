@@ -123,7 +123,7 @@ func main() {
 		blk *bulkResponse
 
 		articles  []*Article
-		indexName = "cport_person"
+		indexName = "cport_personx"
 
 		numItems   int
 		numErrors  int

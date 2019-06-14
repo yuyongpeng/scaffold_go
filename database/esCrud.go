@@ -37,7 +37,7 @@ func (crud *Escrud) GetJobsCount() (count int) {
 	sql := "select count(*) cu from job a left outer join enterprise b on a.enterprise_id = b.enterprise_id "
 	//var logger *logrus.Logger = log.Log
 	db := getDB()
-	db.LogMode(true)
+	//db.LogMode(true)
 	defer db.Close()
 	type Result struct {
 		Cu int
@@ -56,7 +56,7 @@ func (crud *Escrud) GetJobs(start, end int) (jobs []Job) {
 		"from job a left outer join enterprise b on a.enterprise_id = b.enterprise_id "
 	//var logger *logrus.Logger = log.Log
 	db := getDB()
-	db.LogMode(true)
+	//db.LogMode(true)
 	defer db.Close()
 	rows, _ := db.Raw(sql).Limit(end).Offset(start).Rows()
 	defer rows.Close()
