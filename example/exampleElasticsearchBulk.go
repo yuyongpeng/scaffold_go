@@ -17,6 +17,7 @@ LastEditors:
 LastEditTime: 2019-06-13 17:18:11
 Description:
 */
+
 // +build ignore
 
 // This example demonstrates indexing documents using the Elasticsearch "Bulk" API
@@ -60,6 +61,22 @@ type Article struct {
 type Author struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
+}
+/**
+select a.job_name, a.job_description, a.job_area_id,  ,b.enterprise_name
+from job a left outer join enterprise b on a.enterprise_id = b.enterprise_id
+ */
+type Person struct {
+	Company            string `json:"company"`
+	Description_of_job string `json:"description_of_job"`
+	Work_place_id      int    `json:"work_place_id"`
+	Work_place         string `json:"work_place"`
+	Industry_id        int    `json:"industry_id"`
+	Industry           string `json:"industry"`
+	Monthly_salary     int    `json:"monthly_salary"`
+	Education          int    `json:"education"`
+	Experience         int    `json:"experience"`
+	Types              int    `json:"type"`
 }
 
 var (
@@ -106,7 +123,7 @@ func main() {
 		blk *bulkResponse
 
 		articles  []*Article
-		indexName = "articles"
+		indexName = "cport_person"
 
 		numItems   int
 		numErrors  int
@@ -141,16 +158,16 @@ func main() {
 
 	// Re-create the index
 	//
-	if res, err = es.Indices.Delete([]string{indexName}); err != nil {
-		log.Fatalf("Cannot delete index: %s", err)
-	}
-	res, err = es.Indices.Create(indexName)
-	if err != nil {
-		log.Fatalf("Cannot create index: %s", err)
-	}
-	if res.IsError() {
-		log.Fatalf("Cannot create index: %s", res)
-	}
+	//if res, err = es.Indices.Delete([]string{indexName}); err != nil {
+	//	log.Fatalf("Cannot delete index: %s", err)
+	//}
+	//res, err = es.Indices.Create(indexName)
+	//if err != nil {
+	//	log.Fatalf("Cannot create index: %s", err)
+	//}
+	//if res.IsError() {
+	//	log.Fatalf("Cannot create index: %s", res)
+	//}
 
 	if count%batch == 0 {
 		numBatches = (count / batch)
@@ -172,12 +189,35 @@ func main() {
 
 		// Prepare the metadata payload
 		//
-		meta := []byte(fmt.Sprintf(`{ "index" : { "_id" : "%d" } }%s`, a.ID, "\n"))
+		meta := []byte(fmt.Sprintf(`{ "index" : { "_id" : "%d", "_type" : "_doc" } }%s`, a.ID, "\n"))
 		// fmt.Printf("%s", meta) // <-- Uncomment to see the payload
 
 		// Prepare the data payload: encode article to JSON
-		//
-		data, err := json.Marshal(a)
+		//type Person struct {
+		//	Company            string `json:"company"`
+		//	Description_of_job string `json:"description_of_job"`
+		//	Work_place_id      string `json:"work_place_id"`
+		//	Work_place         string `json:"work_place"`
+		//	Industry_id        string `json:"industry_id"`
+		//	Industry           string `json:"industry"`
+		//	Monthly_salary     string `json:"monthly_salary"`
+		//	Education          string `json:"education"`
+		//	Experience         string `json:"experience"`
+		//	Types              string `json:"type"`
+		//}
+		person := Person{
+			Company:            "公司名称",
+			Description_of_job: "职位描述",
+			Work_place_id:      10,
+			Work_place:         "北京",
+			Industry_id:        11,
+			Industry:           "IT",
+			Monthly_salary:     8000,
+			Education:          3,
+			Experience:         2,
+			Types:              1,
+		}
+		data, err := json.Marshal(person)
 		if err != nil {
 			log.Fatalf("Cannot encode article %d: %s", a.ID, err)
 		}
@@ -203,6 +243,8 @@ func main() {
 		//
 		if i > 0 && i%batch == 0 || i == count-1 {
 			log.Printf("> Batch %-2d of %d", currBatch, numBatches)
+
+			log.Printf(buf.String())
 
 			res, err = es.Bulk(bytes.NewReader(buf.Bytes()), es.Bulk.WithIndex(indexName))
 			if err != nil {
@@ -281,4 +323,3 @@ func main() {
 		)
 	}
 }
-
