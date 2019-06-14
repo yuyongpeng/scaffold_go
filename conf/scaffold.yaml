@@ -37,7 +37,7 @@ database:
     password: hard-chain2017
     ip: 106.75.2.31
     port: 3306
-    database: soldier
+    database: cport
     param: charset=utf8mb4&parseTime=True&loc=Local
     maxidleconns: 5                # 保持连接的数量
     maxopenconns: 20               # 最大的连接数

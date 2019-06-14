@@ -9,6 +9,7 @@ Description:
 package main
 
 import (
+	"fmt"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"scaffold_go/database"
 )
@@ -26,10 +27,15 @@ func main() {
 	//defer db.Close()
 	//db.Exec("insert into creditcard (userid, number) values(123,'sdfsdfdfs')")
 
-	crud := &database.Crud{}
-	for {
-		crud.GetCreditCard()
-		//time.Sleep(1 * time.Second)
-	}
+	crud := &database.Escrud{}
+	//for {
+	//	//crud.GetCreditCard()
+	//	//time.Sleep(1 * time.Second)
+	//}
+
+	cu := crud.GetJobsCount()
+	fmt.Println(cu)
+
+	crud.GetJobs(1,100)
 
 }

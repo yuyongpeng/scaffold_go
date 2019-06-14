@@ -139,6 +139,9 @@ curl -X PUT "127.0.0.1:9200/cport_person?pretty" -H 'Content-Type: application/j
 {
   "mappings": {
         "properties": { 
+            "job_id": {
+                "type": "integer"
+            },
             "enterprise_name": {
                 "type": "text",
                 "analyzer": "ik_max_word",

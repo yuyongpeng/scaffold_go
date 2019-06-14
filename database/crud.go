@@ -10,7 +10,6 @@ import (
 	"time"
 )
 
-
 /**
 存放对数据库的操作，增加、删除、查询等
 */
@@ -36,7 +35,7 @@ func (crud *Crud) GetCreditCard() {
 
 /**
 将生成的hash串插入数据库中
- */
+*/
 func (crud *Crud) InsertEncryptedString(encryptedString string) error {
 	var logger *logrus.Logger = log.Log
 	logger.Info(encryptedString)
@@ -48,10 +47,12 @@ func (crud *Crud) InsertEncryptedString(encryptedString string) error {
 	tx := db.Where(Soldier{Encrypted_string: encryptedString}).
 		Attrs(Soldier{Verification_num: 0, Update_time: time.Now(), Create_time: time.Now()}).
 		FirstOrCreate(&soldier)
-	if err := tx.Error; err != nil{
+	if err := tx.Error; err != nil {
 		logger.Errorln(err)
 		return &errors.StatusError{Id: 1001}
-	}else{
+	} else {
 		return nil
 	}
 }
+
+
