@@ -34,23 +34,23 @@ func main() {
 		elastic.ImportJobs(jobs)
 	}
 
-	// 插入一条数据
-	var job database.Job = database.Job{
-		Job_id:            13,
-		Enterprise_name:   "公司名称",
-		Job_name:          "职位名称",
-		Job_description:   "职位描述",
-		Job_area_id:       1,
-		Industry_id:       1,
-		Job_salary:        1,
-		Job_min_education: 1,
-		Job_experience:    1,
-		Job_mode:          1,
-		Enterprise_size:   1,
-		Job_status:        1,
-	}
-
-	elastic.InsertJob(job)
+	//// 插入一条数据
+	//var job database.Job = database.Job{
+	//	Job_id:            13,
+	//	Enterprise_name:   "公司名称",
+	//	Job_name:          "职位名称",
+	//	Job_description:   "职位描述",
+	//	Job_area_id:       1,
+	//	Industry_id:       1,
+	//	Job_salary:        1,
+	//	Job_min_education: 1,
+	//	Job_experience:    1,
+	//	Job_mode:          1,
+	//	Enterprise_size:   1,
+	//	Job_status:        1,
+	//}
+	//
+	//elastic.InsertJob(job)
 
 
 }

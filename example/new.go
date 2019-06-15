@@ -1,50 +1,58 @@
 /**
+      ___           ___           ___
+     /\__\         /\__\         /\  \
+    /:/ _/_       /:/  /        /::\  \
+   /:/ /\  \     /:/  /        /:/\:\  \
+  /:/ /::\  \   /:/  /  ___   /:/ /::\  \
+ /:/_/:/\:\__\ /:/__/  /\__\ /:/_/:/\:\__\
+ \:\/:/ /:/  / \:\  \ /:/  / \:\/:/  \/__/
+  \::/ /:/  /   \:\  /:/  /   \::/__/
+   \/_/:/  /     \:\/:/  /     \:\  \
+     /:/  /       \::/  /       \:\__\
+     \/__/         \/__/         \/__/
 Author:       yuyongpeng@hotmail.com
 Github:       https://github.com/yuyongpeng/
-Date:         2019-06-10 19:26:31
+Date:         2019-06-15 20:23:51
 LastEditors:
-LastEditTime: 2019-06-10 19:26:31
+LastEditTime: 2019-06-15 20:23:51
 Description:
 */
+// +build ignore
+
+// This example demonstrates a basic usage of the Elasticsearch Go client.
+//
+// It fetches the version information from the cluster, indexes a couple
+// of documents concurrently, and performs a search request.
+
 package main
 
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"encoding/json"
-	"github.com/elastic/go-elasticsearch/v7"
-	"github.com/elastic/go-elasticsearch/v7/esapi"
+	"fmt"
 	"log"
-	"net"
-	"net/http"
-	"scaffold_go/elastic"
 	"strconv"
 	"strings"
 	"sync"
-	"time"
+
+	"github.com/elastic/go-elasticsearch/v7"
+	"github.com/elastic/go-elasticsearch/v7/esapi"
 )
 
-func test() {
+func main() {
+	log.SetFlags(0)
+
 	var (
 		r  map[string]interface{}
 		wg sync.WaitGroup
 	)
-	cfg := elasticsearch.Config{
-		Addresses: []string{
-			"http://localhost:9200",
-		},
-		Transport: &http.Transport{
-			MaxIdleConnsPerHost:   10,
-			ResponseHeaderTimeout: time.Second,
-			DialContext:           (&net.Dialer{Timeout: time.Second}).DialContext,
-			TLSClientConfig: &tls.Config{
-				MinVersion: tls.VersionTLS11,
-				// ...
-			},
-		},
-	}
-	es, err := elasticsearch.NewClient(cfg)
+
+	// Initialize a client with the default settings.
+	//
+	// An `ELASTICSEARCH_URL` environment variable will be used when exported.
+	//
+	es, err := elasticsearch.NewDefaultClient()
 	if err != nil {
 		log.Fatalf("Error creating the client: %s", err)
 	}
@@ -141,6 +149,7 @@ func test() {
 	if err != nil {
 		log.Fatalf("Error getting response: %s", err)
 	}
+	fmt.Println(res.String())
 	defer res.Body.Close()
 
 	if res.IsError() {
@@ -160,11 +169,6 @@ func test() {
 	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
 		log.Fatalf("Error parsing the response body: %s", err)
 	}
-	// 获得返回值 json
-	var w = bytes.Buffer{}
-	json.NewEncoder(&w).Encode(&r)
-	log.Println(w.String())
-	log.Println(res.Body)
 	// Print the response status, number of results, and request duration.
 	log.Printf(
 		"[%s] %d hits; took: %dms",
@@ -178,19 +182,4 @@ func test() {
 	}
 
 	log.Println(strings.Repeat("=", 37))
-}
-
-// Client: 8.0.0-SNAPSHOT
-// Server: 8.0.0-SNAPSHOT
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// [201 Created] updated; version=1
-// [201 Created] updated; version=1
-// -------------------------------------
-// [200 OK] 2 hits; took: 5ms
-//  * ID=1, map[title:Test One]
-//  * ID=2, map[title:Test Two]
-// =====================================
-
-func main(){
-	elastic.QueryElastic(map[string]interface{}{}, "cport_person_x")
 }

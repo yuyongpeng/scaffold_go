@@ -38,7 +38,7 @@ func insertJobHandler(ctx iris.Context) {
 		fmt.Print(err)
 	}
 
-	err := elastic.InsertJob(job)
+	err := elastic.InsertElastic(job, "cport_person_x")
 	if err != nil {
 		ctx.JSON(map[string]string{"return_code": "1008", "msg": err.Error()})
 	} else {
@@ -50,7 +50,59 @@ func insertJobHandler(ctx iris.Context) {
 查询职位的信息
 */
 func queryJobHandler(ctx iris.Context) {
-
+	query := map[string]interface{}{
+		"query": map[string]interface{}{
+			"bool": map[string]interface{}{
+				"must": map[string]interface{}{
+					"match": map[string]interface{}{
+						"job_name" : "中国",
+					},
+				},
+				"filter": map[string]interface{}{
+					"bool": map[string]interface{}{
+						"must": []interface{}{
+							map[string]interface{}{
+								"term": map[string]interface{}{
+									"job_mode" : "1",
+								}},
+							map[string]interface{}{
+								"term": map[string]interface{}{
+									"job_salary" : "3",
+								}},
+						},
+					},
+				},
+			},
+		},
+		"size": 10,		// 显示应该返回的结果数量，默认是 10
+		"from": 0,		// 显示应该跳过的初始结果数量，默认是 0
+		"sort": []interface{}{
+			map[string]interface{}{
+				"modify_time": map[string]string{
+					"order": "desc",
+				},
+			},
+		},
+		"highlight": map[string]interface{}{
+			"pre_tags": []string{
+				"<tag1>", "<tag2>",
+			},
+			"post_tags": []string{
+				"<tag1>", "<tag2>",
+			},
+			"fields": map[string]interface{}{
+				"job_name": map[string]interface{}{
+					"number_of_fragments": 0,
+				},
+			},
+		},
+	}
+	retObj, err := elastic.QueryElastic(query, "cport_person_x")
+	if err != nil {
+		ctx.JSON(map[string]string{"return_code": "1009", "msg": err.Error()})
+	}else{
+		ctx.JSON(map[string]interface{}{"return_code": "200", "msg": "", "data": retObj})
+	}
 }
 
 /**

@@ -48,7 +48,7 @@ type bulkResponse struct {
 	} `json:"items"`
 }
 
-var personIndex string = "cport_person"
+var personIndex string = "cport_person_x"
 var res *esapi.Response
 var raw map[string]interface{}
 var blk *bulkResponse
@@ -68,6 +68,9 @@ var cfg = elasticsearch.Config{
 	},
 }
 
+/**
+批量导入数据
+ */
 func ImportJobs(jobs []database.Job) {
 	// Create the Elasticsearch client
 	//
@@ -164,7 +167,7 @@ func ImportJobs(jobs []database.Job) {
 /**
 插入一条数据到elasticsearch
 */
-func InsertJob(job *database.Job) (e error) {
+func InsertElastic(job *database.Job, indexName string) (e error) {
 	es, err := elasticsearch.NewClient(cfg)
 	if err != nil {
 		e = err
@@ -179,7 +182,7 @@ func InsertJob(job *database.Job) (e error) {
 
 	// Set up the request object.
 	req := esapi.IndexRequest{
-		Index:      personIndex,
+		Index:      indexName,
 		DocumentID: strconv.Itoa(job.Job_id),
 		Body:       strings.NewReader(string(jobByte)),
 		Refresh:    "true",
@@ -225,8 +228,113 @@ func InsertJob(job *database.Job) (e error) {
 }
 
 /**
-查询数据
+查询数据 elastic search
 */
-func QueryJob(query interface{}) {
+func QueryElastic(query map[string]interface{}, indexName string) (retJson map[string]interface{}, e error){
+	// 连接 elasticSearch
+	es, err := elasticsearch.NewClient(cfg)
+	// Build the request body.
+	var buf bytes.Buffer
+	//var a interface{} = interface{}{nil}
+	query = map[string]interface{}{
+		"query": map[string]interface{}{
+			"bool": map[string]interface{}{
+				"must": map[string]interface{}{
+					"match": map[string]interface{}{
+						"job_name" : "中国",
+					},
+				},
+				"filter": map[string]interface{}{
+					"bool": map[string]interface{}{
+						"must": []interface{}{
+							map[string]interface{}{
+								"term": map[string]interface{}{
+									"job_mode" : "1",
+							}},
+							map[string]interface{}{
+								"term": map[string]interface{}{
+									"job_salary" : "3",
+							}},
+						},
+					},
+				},
+			},
+		},
+		"size": 10,		// 显示应该返回的结果数量，默认是 10
+		"from": 0,		// 显示应该跳过的初始结果数量，默认是 0
+		"sort": []interface{}{
+			map[string]interface{}{
+				"modify_time": map[string]string{
+					"order": "desc",
+				},
+			},
+		},
+		"highlight": map[string]interface{}{
+			"pre_tags": []string{
+				"<tag1>", "<tag2>",
+			},
+			"post_tags": []string{
+				"<tag1>", "<tag2>",
+			},
+			"fields": map[string]interface{}{
+				"job_name": map[string]interface{}{
+					"number_of_fragments": 0,
+				},
+			},
+		},
+	}
+	if err := json.NewEncoder(&buf).Encode(query); err != nil {
+		e = err
+		log.Fatalf("Error encoding query: %s", err)
+	}
+	fmt.Println(strings.Repeat("*", 30))
+	fmt.Print(buf.String())
+	fmt.Println(strings.Repeat("*", 30))
+	// Perform the search request.
+	res, err = es.Search(
+		es.Search.WithContext(context.Background()),
+		es.Search.WithIndex(indexName),
+		es.Search.WithBody(&buf),
+		es.Search.WithTrackTotalHits(true),  //  跟踪点击总数，如果加了这条语句，会导致解析json时，不会解析hits的数据出来，看不到命中的数据
+		es.Search.WithPretty(),
+	)
+	if err != nil {
+		log.Fatalf("Error getting response: %s", err)
+	}
+	//fmt.Println(res.String())
+	defer res.Body.Close()
 
+	if res.IsError() {
+		// 处理错误信息的body
+		var e map[string]interface{}
+		if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
+			log.Fatalf("Error parsing the response body: %s", err)
+		} else {
+			// Print the response status and error information.
+			log.Fatalf("[%s] %s: %s",
+				res.Status(),
+				e["error"].(map[string]interface{})["type"],
+				e["error"].(map[string]interface{})["reason"],
+			)
+		}
+	}
+	// 将body的内容转换为对象
+	//var r  map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&retJson); err != nil {
+		log.Fatalf("Error parsing the response body: %s", err)
+	}
+
+	// Print the response status, number of results, and request duration.
+	log.Printf(
+		"[%s] %d hits; took: %dms",
+		res.Status(),
+		int(retJson["hits"].(map[string]interface{})["total"].(map[string]interface{})["value"].(float64)),
+		int(retJson["took"].(float64)),
+	)
+	// Print the ID and document source for each hit.
+	//for _, hit := range r["hits"].(map[string]interface{})["hits"].([]interface{}) {
+	//	log.Printf(" * ID=%s, %s", hit.(map[string]interface{})["_id"], hit.(map[string]interface{})["_source"])
+	//}
+
+	return
 }

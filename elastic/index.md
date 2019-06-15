@@ -134,8 +134,8 @@ curl -X PUT "127.0.0.1:9200/cport_person?pretty" -H 'Content-Type: application/j
 select 
 b.enterprise_name, a.job_name, a.job_description, a.job_area_id, b.field_id as industry_id, a.job_salary, a.job_min_education, a.job_experience, a.job_mode, b.enterprise_size, a.job_status
 from job a left outer join enterprise b on a.enterprise_id = b.enterprise_id
-curl -X DELETE http://127.0.0.1:9200/cport_person
-curl -X PUT "127.0.0.1:9200/cport_person?pretty" -H 'Content-Type: application/json' -d'
+curl -X DELETE http://127.0.0.1:9200/cport_person_x
+curl -X PUT "127.0.0.1:9200/cport_person_x?pretty" -H 'Content-Type: application/json' -d'
 {
   "mappings": {
         "properties": { 
@@ -180,7 +180,24 @@ curl -X PUT "127.0.0.1:9200/cport_person?pretty" -H 'Content-Type: application/j
             },
             "job_status": {
                 "type": "integer"
+            },
+            "modify_time": {
+                "type": "date",
+                "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
             }
+        }
+    }
+}
+'
+
+curl -XPOST http://localhost:9200/cport_person_x/_search?pretty  -H 'Content-Type:application/json' -d'
+{
+    "query" : { "match" : { "job_name" : "中国" }},
+    "highlight" : {
+        "pre_tags" : ["<tag1>", "<tag2>"],
+        "post_tags" : ["</tag1>", "</tag2>"],
+        "fields" : {
+            "job_name" : {}
         }
     }
 }

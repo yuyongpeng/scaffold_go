@@ -34,6 +34,7 @@ func main(){
 	fmt.Println(reflect.TypeOf(value))
 
 	fmt.Println(strings.ToLower("aaaAAAA"))
+
 }
 
 
