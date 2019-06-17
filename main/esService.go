@@ -29,6 +29,7 @@ import (
 	"scaffold_go/database"
 	"scaffold_go/elastic"
 	"strings"
+	"time"
 )
 
 /**
@@ -41,7 +42,7 @@ func insertJobHandler(ctx iris.Context) {
 		fmt.Print(err)
 	}
 
-	err := elastic.InsertElastic(job, "cport_person_x")
+	err := elastic.InsertElastic2(job, config.JobIndex)
 	if err != nil {
 		ctx.JSON(map[string]string{"return_code": "1008", "msg": err.Error()})
 	} else {
@@ -79,7 +80,7 @@ func queryJobHandler(ctx iris.Context) {
 		if queryStr != "" {
 			should = append(should, map[string]interface{}{
 				"match": map[string]interface{}{
-					"job_name": map[string]interface{}{		// 权重最高
+					"job_name": map[string]interface{}{ // 权重最高
 						"query": queryStr,
 						"boost": 2.5,
 					},
@@ -153,10 +154,10 @@ func queryJobHandler(ctx iris.Context) {
 		if modify_time_start != "0" || modify_time_end != "0" {
 			var modify_time map[string]string = map[string]string{}
 			if modify_time_start != "0" {
-				modify_time["gte"] = modify_time_start  	// 大于等于
+				modify_time["gte"] = modify_time_start // 大于等于
 			}
 			if modify_time_end != "0" {
-				modify_time["lte"] = modify_time_end		// 小于等于
+				modify_time["lte"] = modify_time_end // 小于等于
 			}
 			k := map[string]interface{}{
 				"range": map[string]interface{}{
@@ -207,15 +208,15 @@ func queryJobHandler(ctx iris.Context) {
 		if jsbyte, err := json.Marshal(query); err != nil {
 			fmt.Println(err)
 		} else {
-			fmt.Println(strings.Repeat("=",20)+ "query json" + strings.Repeat("=",20))
+			fmt.Println(strings.Repeat("=", 20) + "query json" + strings.Repeat("=", 20))
 			fmt.Println(string(jsbyte))
-			fmt.Println(strings.Repeat("=",50))
+			fmt.Println(strings.Repeat("=", 50))
 		}
 
 		retObj, err := elastic.QueryElastic(query, "cport_person_x")
 		if err != nil {
 			ctx.JSON(map[string]string{"return_code": "1009", "msg": err.Error()})
-		}else{
+		} else {
 			ctx.JSON(map[string]interface{}{"return_code": "200", "msg": "", "data": retObj})
 		}
 	}
@@ -226,14 +227,179 @@ func queryJobHandler(ctx iris.Context) {
 插入应聘者的资料到ES中
 */
 func insertPersonHandler(ctx iris.Context) {
-
+	person := &database.Person{}
+	if err := ctx.ReadJSON(person); err != nil {
+		fmt.Print(err)
+	}
+	err := elastic.InsertElastic2(person, config.PersonIndex)
+	if err != nil {
+		ctx.JSON(map[string]string{"return_code": "1008", "msg": err.Error()})
+	} else {
+		ctx.JSON(map[string]string{"return_code": "200", "msg": "", "data": ""})
+	}
 }
 
 /**
 查询应聘者的资料
 */
 func queryPersonHandler(ctx iris.Context) {
+	if bodyJosn, err := simplejson.NewFromReader(ctx.Request().Body); err != nil {
+		fmt.Println(err)
+		ctx.JSON(map[string]string{"return_code": "1008", "msg": err.Error()})
+	} else {
+		queryStr := bodyJosn.Get("query").MustString("")
+		if queryStr == "" {
+			ctx.JSON(map[string]string{"return_code": "1010", "msg": err.Error()})
+		}
+		salary := bodyJosn.Get("salary").MustInt(0)
+		max_education := bodyJosn.Get("max_education").MustInt(0)
+		working_experience := bodyJosn.Get("working_experience").MustInt(0)
+		job_type_id := bodyJosn.Get("job_type_id").MustInt(0)
+		job_area_id := bodyJosn.Get("job_area_id").MustInt(0)
+		job_mode := bodyJosn.Get("job_mode").MustInt(0)
+		age := bodyJosn.Get("age").MustInt(0)
+		size := bodyJosn.Get("size").MustInt(10)
+		from := bodyJosn.Get("from").MustInt(0)
+		modify_time_start := bodyJosn.Get("modify_time_start").MustString("0")
+		modify_time_end := bodyJosn.Get("modify_time_end").MustString("0")
 
+		// 拼接 查询 query的 过滤器
+		var should []interface{}
+		if queryStr != "" {
+			should = append(should, map[string]interface{}{
+				"match": map[string]interface{}{
+					"job_name": map[string]interface{}{ // 权重最高
+						"job_name": queryStr,
+						"boost": 2.5,
+					},
+				}})
+			should = append(should, map[string]interface{}{
+				"match": map[string]interface{}{
+					"job_description": map[string]interface{}{
+						"name": queryStr,
+						"boost": 1.5,
+					},
+				}})
+		}
+
+		var filter []interface{}
+		if salary != 0 {
+			filter = append(filter, map[string]interface{}{
+				"term": map[string]interface{}{
+					"salary": salary,
+				}})
+		}
+		if max_education != 0 {
+			filter = append(filter, map[string]interface{}{
+				"term": map[string]interface{}{
+					"max_education": max_education,
+				}})
+		}
+		if working_experience != 0 {
+			filter = append(filter, map[string]interface{}{
+				"term": map[string]interface{}{
+					"working_experience": working_experience,
+				}})
+		}
+		if job_type_id != 0 {
+			filter = append(filter, map[string]interface{}{
+				"term": map[string]interface{}{
+					"job_type_id": job_type_id,
+				}})
+		}
+		if job_area_id != 0 {
+			filter = append(filter, map[string]interface{}{
+				"term": map[string]interface{}{
+					"job_area_id": job_area_id,
+				}})
+		}
+		if job_mode != 0 {
+			filter = append(filter, map[string]interface{}{
+				"term": map[string]interface{}{
+					"job_mode": job_mode,
+				}})
+		}
+
+		// date range
+		if modify_time_start != "0" || modify_time_end != "0" {
+			var modify_time map[string]string = map[string]string{}
+			if modify_time_start != "0" {
+				modify_time["gte"] = modify_time_start // 大于等于
+			}
+			if modify_time_end != "0" {
+				modify_time["lte"] = modify_time_end // 小于等于
+			}
+			k := map[string]interface{}{
+				"range": map[string]interface{}{
+					"modify_time": modify_time,
+				}}
+			filter = append(filter, k)
+		}
+		year := time.Now().Year() - age
+		if age != 0 {
+			ageFilter := map[string]interface{}{
+				"range": map[string]interface{}{
+					"birth_date": map[string]string{
+						"gte": string(year) + "-01-01",
+					},
+				}}
+			filter = append(filter, ageFilter)
+		}
+
+		query := map[string]interface{}{
+			"query": map[string]interface{}{
+				"bool": map[string]interface{}{
+					"must": map[string]interface{}{
+						"match": map[string]interface{}{
+							"job_name": queryStr,
+						},
+					},
+					"filter": map[string]interface{}{
+						"bool": map[string]interface{}{
+							"must": filter,
+						},
+					},
+				},
+			},
+			"size": size, // 显示应该返回的结果数量，默认是 10
+			"from": from, // 显示应该跳过的初始结果数量，默认是 0
+			"sort": []interface{}{
+				map[string]interface{}{
+					"modify_time": map[string]string{
+						"order": "desc",
+					},
+				},
+			},
+			"highlight": map[string]interface{}{
+				"pre_tags": []string{
+					"<tag1>", "<tag2>",
+				},
+				"post_tags": []string{
+					"<tag1>", "<tag2>",
+				},
+				"fields": map[string]interface{}{
+					"job_name": map[string]interface{}{
+						"number_of_fragments": 0,
+					},
+				},
+			},
+		}
+		// 打印 query 数据 用于测试
+		if jsbyte, err := json.Marshal(query); err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(strings.Repeat("=", 20) + "query json" + strings.Repeat("=", 20))
+			fmt.Println(string(jsbyte))
+			fmt.Println(strings.Repeat("=", 50))
+		}
+
+		retObj, err := elastic.QueryElastic(query, "cport_person_x")
+		if err != nil {
+			ctx.JSON(map[string]string{"return_code": "1009", "msg": err.Error()})
+		} else {
+			ctx.JSON(map[string]interface{}{"return_code": "200", "msg": "", "data": retObj})
+		}
+	}
 }
 
 func main() {

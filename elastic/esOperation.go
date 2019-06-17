@@ -48,8 +48,8 @@ type bulkResponse struct {
 	} `json:"items"`
 }
 
-var personIndex string = "cport_person_x"
-var jobIndex string = "cport_job"
+//var personIndex string = "cport_person_x"
+//var jobIndex string = "cport_job"
 var res *esapi.Response
 var raw map[string]interface{}
 var blk *bulkResponse
@@ -81,7 +81,7 @@ func ImportJobs(jobs []database.Job) {
 	}
 	var buf bytes.Buffer
 	for _, job := range jobs {
-		meta := []byte(fmt.Sprintf(`{ "index" : { "_index": "%s" , "_id" : "%d", "_type" : "_doc" } }%s`, jobIndex, job.Job_id, "\n"))
+		meta := []byte(fmt.Sprintf(`{ "index" : { "_index": "%s" , "_id" : "%d", "_type" : "_doc" } }%s`, config.JobIndex, job.Job_id, "\n"))
 		data, _ := json.Marshal(job)
 		data = append(data, "\n"...)
 		buf.Grow(len(meta) + len(data))
@@ -93,7 +93,7 @@ func ImportJobs(jobs []database.Job) {
 	// 记录导入的开始时间
 	start := time.Now().UTC()
 	// 进行批量数据导入
-	res, err = es.Bulk(bytes.NewReader(buf.Bytes()), es.Bulk.WithIndex(jobIndex))
+	res, err = es.Bulk(bytes.NewReader(buf.Bytes()), es.Bulk.WithIndex(config.JobIndex))
 	if err != nil {
 		log.Fatalf("Failure indexing : %s", err)
 	}
@@ -177,7 +177,7 @@ func ImportPersons(persons []database.Person) {
 	}
 	var buf bytes.Buffer
 	for _, person := range persons {
-		meta := []byte(fmt.Sprintf(`{ "index" : { "_index": "%s" , "_id" : "%d", "_type" : "_doc" } }%s`, personIndex, person.Resume_id, "\n"))
+		meta := []byte(fmt.Sprintf(`{ "index" : { "_index": "%s" , "_id" : "%d", "_type" : "_doc" } }%s`, config.PersonIndex, person.Resume_id, "\n"))
 		data, _ := json.Marshal(person)
 		data = append(data, "\n"...)
 		buf.Grow(len(meta) + len(data))
@@ -189,7 +189,7 @@ func ImportPersons(persons []database.Person) {
 	// 记录导入的开始时间
 	start := time.Now().UTC()
 	// 进行批量数据导入
-	res, err = es.Bulk(bytes.NewReader(buf.Bytes()), es.Bulk.WithIndex(personIndex))
+	res, err = es.Bulk(bytes.NewReader(buf.Bytes()), es.Bulk.WithIndex(config.PersonIndex))
 	if err != nil {
 		log.Fatalf("Failure indexing : %s", err)
 	}
@@ -324,6 +324,78 @@ func InsertElastic(job *database.Job, indexName string) (e error) {
 	return
 }
 
+/*
+插入一条数据到elasticsearch
+只允许插入 *database.Job 和 *database.Person
+ */
+func InsertElastic2(obj interface{}, indexName string) (e error) {
+	es, err := elasticsearch.NewClient(cfg)
+	if err != nil {
+		e = err
+		log.Fatalf("Error creating the client: %s", err)
+	}
+
+	jobByte, err := json.Marshal(obj)
+	if err != nil {
+		e = err
+		fmt.Println(err)
+	}
+	var id int
+	switch obj.(type){
+	case *database.Job:
+		job := obj.(*database.Job)
+		id = job.Job_id
+	case *database.Person:
+		person := obj.(*database.Person)
+		id = person.Resume_id
+	}
+
+	// Set up the request object.
+	req := esapi.IndexRequest{
+		Index:      indexName,
+		DocumentID: strconv.Itoa(id),
+		Body:       strings.NewReader(string(jobByte)),
+		Refresh:    "true",
+	}
+	// Perform the request with the client.
+	res, err := req.Do(context.Background(), es)
+	if err != nil {
+		e = err
+		log.Fatalf("Error getting response: %s", err)
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		//打印body信息
+		red := bufio.NewReader(res.Body)
+		var retErrStr string = ""
+		for {
+			line, err := red.ReadString('\n')
+			if err == io.EOF{
+				retErrStr = retErrStr + line
+				fmt.Println(line)
+				break
+			}
+			if err != nil {
+				retErrStr = retErrStr + line
+				fmt.Println(line)
+			}
+		}
+		e = fmt.Errorf(retErrStr)
+		log.Printf("[%s] Error indexing document ID=%d", res.Status(), id)
+	} else {
+		// Deserialize the response into a map.
+		var r map[string]interface{}
+		if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+			e = err
+			log.Printf("Error parsing the response body: %s", err)
+		} else {
+			// Print the response status and indexed document version.
+			log.Printf("[%s] %s; version=%d", res.Status(), r["result"], int(r["_version"].(float64)))
+		}
+	}
+	return
+}
 /**
 查询数据 elastic search
 query = map[string]interface{}{

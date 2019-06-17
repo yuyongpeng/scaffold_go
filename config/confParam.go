@@ -72,6 +72,12 @@ type Elastic struct {
 	MaxIdleConnsPerHost int      `mapstructure:"MaxIdleConnsPerHost"`
 }
 
+// 索引名称
+var PersonIndex string = "cport_person_x"
+var JobIndex string = "cport_job"
+
+
+
 // 日志的格式化输出 "json" 和 "text", 填写错误,默认使用json
 var LOG_FORMATER = "text"
 // 日志的输出 "console(os.Stderr)" "file", 填写错误,默认使用console

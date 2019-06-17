@@ -26,7 +26,7 @@ curl -X PUT "127.0.0.1:9200/cport_person_x?pretty" -H 'Content-Type: application
                     "analyzer": "ik_max_word",
                     "search_analyzer": "ik_smart"
             },
-            "description": {
+            "name": {
                     "type": "text",
                     "analyzer": "ik_max_word",
                     "search_analyzer": "ik_smart"
