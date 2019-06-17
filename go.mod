@@ -70,4 +70,5 @@ replace (
 	google.golang.org/genproto => github.com/google/go-genproto v0.0.0-20190611190212-a7e196e89fd3
 	google.golang.org/grpc => github.com/grpc/grpc-go v1.21.1
 	google.golang.org/api => github.com/googleapis/google-api-go-client v0.6.0
+	cloud.google.com/go => github.com/googleapis/google-cloud-go v0.40.0
 )
