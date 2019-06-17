@@ -56,10 +56,10 @@ var blk *bulkResponse
 var numErrors int
 var numIndexed int
 
-var cfg = elasticsearch.Config{
-	Addresses: config.Cfg.Elastic.Addresses,
+var elasticCfg = elasticsearch.Config{
+	Addresses: Elastic.Addresses,
 	Transport: &http.Transport{
-		MaxIdleConnsPerHost:   config.Cfg.Elastic.MaxIdleConnsPerHost,
+		MaxIdleConnsPerHost:   Elastic.MaxIdleConnsPerHost,
 		ResponseHeaderTimeout: time.Second,
 		DialContext:           (&net.Dialer{Timeout: time.Second}).DialContext,
 		TLSClientConfig: &tls.Config{
@@ -69,13 +69,21 @@ var cfg = elasticsearch.Config{
 	},
 }
 
+var cfg = config.Cfg
+var Elastic config.Elastic
+func init(){
+	environment := cfg.Environment
+	Elastic = cfg.Elastic[environment]
+}
+
 /**
 批量导入 Job 数据
 */
 func ImportJobs(jobs []database.Job) {
 	// Create the Elasticsearch client
 	//
-	es, err := elasticsearch.NewClient(cfg)
+	fmt.Println(Elastic)
+	es, err := elasticsearch.NewClient(elasticCfg)
 	if err != nil {
 		log.Fatalf("Error creating the client: %s", err)
 	}
@@ -171,7 +179,7 @@ func ImportJobs(jobs []database.Job) {
 func ImportPersons(persons []database.Person) {
 	// Create the Elasticsearch client
 	//
-	es, err := elasticsearch.NewClient(cfg)
+	es, err := elasticsearch.NewClient(elasticCfg)
 	if err != nil {
 		log.Fatalf("Error creating the client: %s", err)
 	}
@@ -265,7 +273,7 @@ func ImportPersons(persons []database.Person) {
 插入一条数据到elasticsearch
 */
 func InsertElastic(job *database.Job, indexName string) (e error) {
-	es, err := elasticsearch.NewClient(cfg)
+	es, err := elasticsearch.NewClient(elasticCfg)
 	if err != nil {
 		e = err
 		log.Fatalf("Error creating the client: %s", err)
@@ -329,7 +337,7 @@ func InsertElastic(job *database.Job, indexName string) (e error) {
 只允许插入 *database.Job 和 *database.Person
  */
 func InsertElastic2(obj interface{}, indexName string) (e error) {
-	es, err := elasticsearch.NewClient(cfg)
+	es, err := elasticsearch.NewClient(elasticCfg)
 	if err != nil {
 		e = err
 		log.Fatalf("Error creating the client: %s", err)
@@ -448,7 +456,7 @@ query = map[string]interface{}{
 */
 func QueryElastic(query map[string]interface{}, indexName string) (retJson map[string]interface{}, e error){
 	// 连接 elasticSearch
-	es, err := elasticsearch.NewClient(cfg)
+	es, err := elasticsearch.NewClient(elasticCfg)
 	// Build the request body.
 	var buf bytes.Buffer
 	//var a interface{} = interface{}{nil}

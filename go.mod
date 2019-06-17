@@ -54,6 +54,7 @@ require (
 )
 
 replace (
+	cloud.google.com/go => github.com/googleapis/google-cloud-go v0.40.0
 	golang.org/x/crypto => github.com/golang/crypto v0.0.0-20190605123033-f99c8df09eb5
 	golang.org/x/exp => github.com/golang/exp v0.0.0-20190510132918-efd6b22b2522
 	golang.org/x/image => github.com/golang/image v0.0.0-20190523035834-f03afa92d3ff
@@ -66,9 +67,8 @@ replace (
 	golang.org/x/text => github.com/golang/text v0.3.0
 	golang.org/x/time => github.com/golang/time v0.0.0-20190308202827-9d24e82272b4
 	golang.org/x/tools => github.com/golang/tools v0.0.0-20190608022120-eacb66d2a7c3
+	google.golang.org/api => github.com/googleapis/google-api-go-client v0.6.0
 	google.golang.org/appengine => github.com/golang/appengine v1.6.1
 	google.golang.org/genproto => github.com/google/go-genproto v0.0.0-20190611190212-a7e196e89fd3
 	google.golang.org/grpc => github.com/grpc/grpc-go v1.21.1
-	google.golang.org/api => github.com/googleapis/google-api-go-client v0.6.0
-	cloud.google.com/go => github.com/googleapis/google-cloud-go v0.40.0
 )

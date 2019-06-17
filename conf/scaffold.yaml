@@ -54,9 +54,18 @@ database:
     connmaxlifetime: 3600000000000 # 每个连接保持的时间 1小时。60 * 60 * 1000 * 1000 * 1000
 
 elastic:
-  addresses:
-    - http://localhost:9200
-  MaxIdleConnsPerHost: 10
+  default:
+    addresses:
+      - http://localhost:9200
+    MaxIdleConnsPerHost: 10
+  develop:
+    addresses:
+      - http://192.168.0.189:9200
+    MaxIdleConnsPerHost: 10
+  release:
+    addresses:
+      - http://192.168.1.73:9200
+    MaxIdleConnsPerHost: 10
 
 iris:
   web: /Users/yuyongpeng/gopath/src/scaffold_go/web/views

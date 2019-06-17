@@ -14,7 +14,7 @@ from resume a left outer join person b on a.person_id = b.person_id
 
 
 curl -X DELETE http://127.0.0.1:9200/cport_person_x
-curl -X PUT "127.0.0.1:9200/cport_person_x?pretty" -H 'Content-Type: application/json' -d'
+curl -X PUT "192.168.0.189:9200/cport_person_x?pretty" -H 'Content-Type: application/json' -d'
 {
   "mappings": {
         "properties": { 
@@ -159,7 +159,7 @@ select
 b.enterprise_name, a.job_name, a.job_description, a.job_area_id, b.field_id as industry_id, a.job_salary, a.job_min_education, a.job_experience, a.job_mode, b.enterprise_size, a.job_status
 from job a left outer join enterprise b on a.enterprise_id = b.enterprise_id
 curl -X DELETE http://127.0.0.1:9200/cport_job
-curl -X PUT "127.0.0.1:9200/cport_job?pretty" -H 'Content-Type: application/json' -d'
+curl -X PUT "192.168.0.189:9200/cport_job?pretty" -H 'Content-Type: application/json' -d'
 {
   "mappings": {
         "properties": { 

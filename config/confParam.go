@@ -31,10 +31,10 @@ type CfgStruct struct {
 	Eyes     string      `mapstructure:"eyes"`
 	Beard    bool        `mapstructure:"beard"`
 	//////////////////////////////////////////////////////////
-	Environment string           `mapstructure:"environment"`
-	Iris        Iris             `mapstructure:"iris"`
-	Database    map[string]Mysql `mapstructure:"database"`
-	Elastic     Elastic          `mapstructure:"elastic"`
+	Environment string             `mapstructure:"environment"`
+	Iris        Iris               `mapstructure:"iris"`
+	Database    map[string]Mysql   `mapstructure:"database"`
+	Elastic     map[string]Elastic `mapstructure:"elastic"`
 }
 type Mysql struct {
 	Username        string `mapstructure:"userame"`
@@ -68,15 +68,13 @@ type Iris struct {
 }
 
 type Elastic struct {
-	Addresses           []string `mapstructure:"address"`
+	Addresses           []string `mapstructure:"addresses"`
 	MaxIdleConnsPerHost int      `mapstructure:"MaxIdleConnsPerHost"`
 }
 
 // 索引名称
 var PersonIndex string = "cport_person_x"
 var JobIndex string = "cport_job"
-
-
 
 // 日志的格式化输出 "json" 和 "text", 填写错误,默认使用json
 var LOG_FORMATER = "text"
