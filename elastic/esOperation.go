@@ -48,8 +48,6 @@ type bulkResponse struct {
 	} `json:"items"`
 }
 
-//var personIndex string = "cport_person_x"
-//var jobIndex string = "cport_job"
 var res *esapi.Response
 var raw map[string]interface{}
 var blk *bulkResponse
@@ -84,8 +82,6 @@ func init(){
 func ImportJobs(jobs []database.Job) {
 	// Create the Elasticsearch client
 	//
-	fmt.Println(Elastic)
-	fmt.Println(elasticCfg.Addresses)
 	es, err := elasticsearch.NewClient(elasticCfg)
 	if err != nil {
 		log.Fatalf("Error creating the client: %s", err)
