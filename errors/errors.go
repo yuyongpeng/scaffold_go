@@ -37,6 +37,7 @@ var StatusMsg = map[int]string{
 	1007: "日期格式不对",
 	1008: "职位信息插入elasticsearch失败",
 	1009: "职位信息搜索elasticsearch失败",
+	1010: "请输出搜索的内容",
 }
 
 func NewStatusError(errorNum int) error {

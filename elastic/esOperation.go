@@ -229,14 +229,7 @@ func InsertElastic(job *database.Job, indexName string) (e error) {
 
 /**
 查询数据 elastic search
-*/
-func QueryElastic(query map[string]interface{}, indexName string) (retJson map[string]interface{}, e error){
-	// 连接 elasticSearch
-	es, err := elasticsearch.NewClient(cfg)
-	// Build the request body.
-	var buf bytes.Buffer
-	//var a interface{} = interface{}{nil}
-	query = map[string]interface{}{
+query = map[string]interface{}{
 		"query": map[string]interface{}{
 			"bool": map[string]interface{}{
 				"must": map[string]interface{}{
@@ -283,6 +276,13 @@ func QueryElastic(query map[string]interface{}, indexName string) (retJson map[s
 			},
 		},
 	}
+*/
+func QueryElastic(query map[string]interface{}, indexName string) (retJson map[string]interface{}, e error){
+	// 连接 elasticSearch
+	es, err := elasticsearch.NewClient(cfg)
+	// Build the request body.
+	var buf bytes.Buffer
+	//var a interface{} = interface{}{nil}
 	if err := json.NewEncoder(&buf).Encode(query); err != nil {
 		e = err
 		log.Fatalf("Error encoding query: %s", err)
@@ -318,7 +318,7 @@ func QueryElastic(query map[string]interface{}, indexName string) (retJson map[s
 			)
 		}
 	}
-	// 将body的内容转换为对象
+	// 将body的内容转换为对象操作
 	//var r  map[string]interface{}
 	if err := json.NewDecoder(res.Body).Decode(&retJson); err != nil {
 		log.Fatalf("Error parsing the response body: %s", err)
