@@ -56,24 +56,26 @@ var blk *bulkResponse
 var numErrors int
 var numIndexed int
 
-var elasticCfg = elasticsearch.Config{
-	Addresses: Elastic.Addresses,
-	Transport: &http.Transport{
-		MaxIdleConnsPerHost:   Elastic.MaxIdleConnsPerHost,
-		ResponseHeaderTimeout: time.Second,
-		DialContext:           (&net.Dialer{Timeout: time.Second}).DialContext,
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS11,
-			// ...
-		},
-	},
-}
+var elasticCfg elasticsearch.Config
 
 var cfg = config.Cfg
 var Elastic config.Elastic
 func init(){
 	environment := cfg.Environment
 	Elastic = cfg.Elastic[environment]
+
+	elasticCfg = elasticsearch.Config{
+		Addresses: Elastic.Addresses,
+		Transport: &http.Transport{
+			MaxIdleConnsPerHost:   Elastic.MaxIdleConnsPerHost,
+			ResponseHeaderTimeout: time.Second,
+			DialContext:           (&net.Dialer{Timeout: time.Second}).DialContext,
+			TLSClientConfig: &tls.Config{
+				MinVersion: tls.VersionTLS11,
+				// ...
+			},
+		},
+	}
 }
 
 /**
@@ -83,6 +85,7 @@ func ImportJobs(jobs []database.Job) {
 	// Create the Elasticsearch client
 	//
 	fmt.Println(Elastic)
+	fmt.Println(elasticCfg.Addresses)
 	es, err := elasticsearch.NewClient(elasticCfg)
 	if err != nil {
 		log.Fatalf("Error creating the client: %s", err)
