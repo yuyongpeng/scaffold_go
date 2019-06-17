@@ -96,3 +96,82 @@ func (crud *Escrud) GetJobs(start, end int) (jobs []Job) {
 	}
 	return
 }
+
+/**
+每次查询1000条数据
+*/
+
+type Person struct {
+	Resume_id          int    `json:"resume_id"`          // `求职表的id`
+	Job_name           string `json:"job_name"`           // `职位名称`
+	Person_name        string `json:"name"`               // `人名`
+	Salary             int    `json:"salary"`             // `职位月薪`
+	Max_education      int    `json:"max_education"`      // `教育程度`
+	Working_experience int    `json:"working_experience"` // `工作经验`
+	Job_type_id        int    `json:"job_type_id"`        // `职位类型`
+	Job_area_id        int    `json:"job_area_id"`        // `职位所在地区`
+	Job_mode           int    `json:"job_mode"`           // `全职、兼职`
+	Modify_time        string `json:"modify_time"`        // `职位更新时间`
+	Birth_date         string `json:"birth_date"`         // `求职人生日`
+}
+
+/*
+获得所有可以导入的求职人的数量
+*/
+func (crud *Escrud) GetPersonsCount() (count int) {
+	sql := "select count(*) cu from resume a left outer join person b on a.person_id = b.person_id "
+	//var logger *logrus.Logger = log.Log
+	db := getDB()
+	//db.LogMode(true)
+	defer db.Close()
+	type Result struct {
+		Cu int
+	}
+	var result Result
+	//db.Exec(sql).Scan(&result)
+	db.Raw(sql).Scan(&result)
+	count = result.Cu
+	return
+}
+
+/*
+查询求职人的数据
+*/
+func (crud *Escrud) GetPersons(start, end int) (persons []Person) {
+	sql := "select a.resume_id, a.job_name, b.name, a.salary, a.max_education," +
+		" a.working_experience, a.job_type_id,a.job_area_id,a.job_mode, a.modify_time,b.birth_date " +
+		"from resume a left outer join person b on a.person_id = b.person_id "
+	//var logger *logrus.Logger = log.Log
+	db := getDB()
+	//db.LogMode(true)
+	defer db.Close()
+	rows, _ := db.Raw(sql).Limit(end).Offset(start).Rows()
+	defer rows.Close()
+
+	for rows.Next() {
+		var resume_id int
+		var job_name string
+		var name string
+		var salary int
+		var max_education int
+		var working_experience int
+		var job_type_id int
+		var job_area_id int
+		var job_mode int
+		var modify_time time.Time
+		var birth_date time.Time
+		rows.Scan(&resume_id, &job_name, &name, &salary,
+			&max_education, &working_experience, &job_type_id, &job_area_id,
+			&job_mode, &modify_time, &birth_date)
+		//fmt.Printf(modify_time.String()+ "    ")
+		//fmt.Println(modify_time.Format("2006-01-02 15:04:05"))
+		var person Person = Person{resume_id, job_name,
+			name, salary, max_education,
+			working_experience, job_type_id,
+			job_area_id, job_mode,
+			modify_time.Format("2006-01-02 15:04:05"),
+			birth_date.Format("2006-01-02 15:04:05"),}
+		persons = append(persons, person)
+	}
+	return
+}

@@ -1,37 +1,61 @@
 ## 人的信息
 ```bash
-curl -X DELETE http://127.0.0.1:9200/cport_person
-curl -X PUT "127.0.0.1:9200/cport_person?pretty" -H 'Content-Type: application/json' -d'
+salary : 期望月薪
+max_education : 教育程度
+working_experience : 工作经验
+job_type_id : 职位类别 全职还是兼职
+job_area_id : 职位所在地区
+job_mode : 职位
+modify_time : 职位更新时间
+birth_date : 生日
+
+select a.resume_id, a.job_name, b.name, a.salary, a.max_education, a.working_experience, a.job_type_id,a.job_area_id,a.job_mode, a.modify_time,b.birth_date
+from resume a left outer join person b on a.person_id = b.person_id
+
+
+curl -X DELETE http://127.0.0.1:9200/cport_person_x
+curl -X PUT "127.0.0.1:9200/cport_person_x?pretty" -H 'Content-Type: application/json' -d'
 {
   "mappings": {
         "properties": { 
-            "content": {
+            "resume_id": {
+                "type": "integer"
+            },
+            "job_name": {
                     "type": "text",
                     "analyzer": "ik_max_word",
                     "search_analyzer": "ik_smart"
             },
-            "dt": {
+            "description": {
+                    "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_smart"
+            },
+            "salary": {
+                "type": "integer"
+            },
+            "max_education": { 
+                "type": "integer"
+            },
+            "working_experience": { 
+                "type": "integer"
+            },
+            "job_type_id": {
+                "type": "integer"
+            },
+            "job_area_id": {
+                "type": "integer"
+            },
+            "job_mode": {
+                "type": "integer"
+            },
+            "modify_time": {
                 "type": "date",
                 "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
             },
-            "keyword_arr": {
-                "type": "object"
-            },
-            "stas": {
-                "type": "integer"
-            },
-            "is_published": {
-                "type": "boolean"
-            },
-            "create_at": {
-                "type": "date_range",
+            "birth_date": {
+                "type": "date",
                 "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
-            },
-            "count": {
-                "type": "integer_range"
-            },
-            "json_obj": {
-                "type": "object"
             }
         }
     }
@@ -134,8 +158,8 @@ curl -X PUT "127.0.0.1:9200/cport_person?pretty" -H 'Content-Type: application/j
 select 
 b.enterprise_name, a.job_name, a.job_description, a.job_area_id, b.field_id as industry_id, a.job_salary, a.job_min_education, a.job_experience, a.job_mode, b.enterprise_size, a.job_status
 from job a left outer join enterprise b on a.enterprise_id = b.enterprise_id
-curl -X DELETE http://127.0.0.1:9200/cport_person_x
-curl -X PUT "127.0.0.1:9200/cport_person_x?pretty" -H 'Content-Type: application/json' -d'
+curl -X DELETE http://127.0.0.1:9200/cport_job
+curl -X PUT "127.0.0.1:9200/cport_job?pretty" -H 'Content-Type: application/json' -d'
 {
   "mappings": {
         "properties": { 
