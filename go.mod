@@ -66,5 +66,8 @@ replace (
 	golang.org/x/text => github.com/golang/text v0.3.0
 	golang.org/x/time => github.com/golang/time v0.0.0-20190308202827-9d24e82272b4
 	golang.org/x/tools => github.com/golang/tools v0.0.0-20190608022120-eacb66d2a7c3
-
+	google.golang.org/appengine => github.com/golang/appengine v1.6.1
+	google.golang.org/genproto => github.com/google/go-genproto v0.0.0-20190611190212-a7e196e89fd3
+	google.golang.org/grpc => github.com/grpc/grpc-go v1.21.1
+	google.golang.org/api => github.com/googleapis/google-api-go-client v0.6.0
 )

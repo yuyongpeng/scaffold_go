@@ -7,3 +7,6 @@ linux:
 	go build main/esService.go
 	go build main/soldierImportService.go
 
+initgo: export GO111MODULE=on
+initgo:
+	go mod download
