@@ -75,6 +75,31 @@ func queryJobHandler(ctx iris.Context) {
 		modify_time_end := bodyJosn.Get("modify_time_end").MustString("0")
 
 		// 拼接 查询 query的 过滤器
+		var should []interface{}
+		if queryStr != "" {
+			should = append(should, map[string]interface{}{
+				"match": map[string]interface{}{
+					"job_name": map[string]interface{}{		// 权重最高
+						"query": queryStr,
+						"boost": 2.5,
+					},
+				}})
+			should = append(should, map[string]interface{}{
+				"match": map[string]interface{}{
+					"job_description": map[string]interface{}{
+						"query": queryStr,
+						"boost": 1.5,
+					},
+				}})
+			should = append(should, map[string]interface{}{
+				"match": map[string]interface{}{
+					"enterprise_name": map[string]interface{}{
+						"query": queryStr,
+						"boost": 1,
+					},
+				}})
+		}
+
 		var filter []interface{}
 		if job_area_id != 0 {
 			filter = append(filter, map[string]interface{}{
