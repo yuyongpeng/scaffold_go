@@ -42,7 +42,7 @@ database:
     maxidleconns: 5                # 保持连接的数量
     maxopenconns: 20               # 最大的连接数
     connmaxlifetime: 3600000000000 # 每个连接保持的时间 1小时。60 * 60 * 1000 * 1000 * 1000
-  release:
+  soldier:
     userame: root
     password: hard-chain2017
     ip: 106.75.2.31
@@ -62,9 +62,9 @@ elastic:
     addresses:
       - http://192.168.0.189:9200
     MaxIdleConnsPerHost: 10
-  release:
+  soldier:
     addresses:
-      - http://192.168.1.73:9200
+      - http://192.168.0.189:9200
     MaxIdleConnsPerHost: 10
 
 iris:
@@ -120,7 +120,7 @@ iris:
     ViewLayoutContextKey:        "iris.viewLayout"
     ViewDataContextKey:          "iris.viewData"
     EnableOptimizations:         false
-  release:
+  soldier:
     ip: 192.168.0.189
     port: 8085
     web: /HC/GIT/web/views

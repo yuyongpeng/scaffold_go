@@ -25,6 +25,11 @@ var Vp *viper.Viper
 
 func init() {
 	Vp = viper.New()
+
+	Vp.SetEnvPrefix("") // will be uppercased automatically
+	Vp.BindEnv("environment")
+	//fmt.Println(Vp.GetString("environment"))
+
 	Vp.SetConfigName(CONF_FILE) // 设定配置文件的名称（不包括后缀）
 	for _, path := range CONF_SEARCH_PATH {
 		//fmt.Println(path)
@@ -43,6 +48,7 @@ func init() {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	Vp.Unmarshal(&Cfg)
+	Cfg.Environment = Vp.GetString("environment")
 }
 
 func getViper() (vp *viper.Viper) {
@@ -80,6 +86,7 @@ var Cfg CfgStruct = CfgStruct{}
 func NewVp() {
 	Vp.Unmarshal(&Cfg)
 	//fmt.Println(Cfg)
+	Cfg.Environment = Vp.GetString("environment")
 }
 
 // 从配置文件获得Iris的配置信息
