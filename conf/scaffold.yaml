@@ -68,26 +68,81 @@ elastic:
     MaxIdleConnsPerHost: 10
 
 iris:
-  web: /Users/yuyongpeng/gopath/src/scaffold_go/web/views
-  upload: /Users/yuyongpeng/gopath/src/scaffold_go/uploads/
-  DisableStartupLog:                 false
-  DisableInterruptHandler:           false
-  DisablePathCorrection:             false
-  EnablePathEscape:                  false
-  FireMethodNotAllowed:              false
-  DisableBodyConsumptionOnUnmarshal: false
-  DisableAutoFireStatusCode:         false
-  TimeFormat:                        "Mon, Jan 02 2006 15:04:05 GMT"
-  Charset:                           "UTF-16"
+  default:
+    ip: 127.0.0.1
+    port: 8085
+    web: /Users/yuyongpeng/gopath/src/scaffold_go/web/views
+    upload: /Users/yuyongpeng/gopath/src/scaffold_go/uploads/
+    DisableStartupLog:                 false
+    DisableInterruptHandler:           false
+    DisablePathCorrection:             false
+    EnablePathEscape:                  false
+    FireMethodNotAllowed:              false
+    DisableBodyConsumptionOnUnmarshal: false
+    DisableAutoFireStatusCode:         false
+    TimeFormat:                        "Mon, Jan 02 2006 15:04:05 GMT"
+    Charset:                           "UTF-16"
 
-  #PostMaxMemoryisforpostbodymaxmemory.
-  #
-  #Therequestbodythesizelimit
-  #canbesetbythemiddleware`LimitRequestBodySize`
-  #or`context#SetMaxRequestBodySize`.
-  PostMaxMemory:               33554432  # 32 << 20 = 32 * 1024 * 1024  =  32MB
-  TranslateFunctionContextKey: "iris.translate"
-  TranslateLanguageContextKey: "iris.language"
-  ViewLayoutContextKey:        "iris.viewLayout"
-  ViewDataContextKey:          "iris.viewData"
-  EnableOptimizations:         false
+    #PostMaxMemoryisforpostbodymaxmemory.
+    #
+    #Therequestbodythesizelimit
+    #canbesetbythemiddleware`LimitRequestBodySize`
+    #or`context#SetMaxRequestBodySize`.
+    PostMaxMemory:               33554432  # 32 << 20 = 32 * 1024 * 1024  =  32MB
+    TranslateFunctionContextKey: "iris.translate"
+    TranslateLanguageContextKey: "iris.language"
+    ViewLayoutContextKey:        "iris.viewLayout"
+    ViewDataContextKey:          "iris.viewData"
+    EnableOptimizations:         false
+  develop:
+    ip: 192.168.0.189
+    port: 8085
+    web: /HC/GIT/web/views
+    upload: /HC/GIT/uploads/
+    DisableStartupLog:                 false
+    DisableInterruptHandler:           false
+    DisablePathCorrection:             false
+    EnablePathEscape:                  false
+    FireMethodNotAllowed:              false
+    DisableBodyConsumptionOnUnmarshal: false
+    DisableAutoFireStatusCode:         false
+    TimeFormat:                        "Mon, Jan 02 2006 15:04:05 GMT"
+    Charset:                           "UTF-16"
+
+    #PostMaxMemoryisforpostbodymaxmemory.
+    #
+    #Therequestbodythesizelimit
+    #canbesetbythemiddleware`LimitRequestBodySize`
+    #or`context#SetMaxRequestBodySize`.
+    PostMaxMemory:               33554432  # 32 << 20 = 32 * 1024 * 1024  =  32MB
+    TranslateFunctionContextKey: "iris.translate"
+    TranslateLanguageContextKey: "iris.language"
+    ViewLayoutContextKey:        "iris.viewLayout"
+    ViewDataContextKey:          "iris.viewData"
+    EnableOptimizations:         false
+  release:
+    ip: 192.168.0.189
+    port: 8085
+    web: /HC/GIT/web/views
+    upload: /HC/GIT/uploads/
+    DisableStartupLog:                 false
+    DisableInterruptHandler:           false
+    DisablePathCorrection:             false
+    EnablePathEscape:                  false
+    FireMethodNotAllowed:              false
+    DisableBodyConsumptionOnUnmarshal: false
+    DisableAutoFireStatusCode:         false
+    TimeFormat:                        "Mon, Jan 02 2006 15:04:05 GMT"
+    Charset:                           "UTF-16"
+
+    #PostMaxMemoryisforpostbodymaxmemory.
+    #
+    #Therequestbodythesizelimit
+    #canbesetbythemiddleware`LimitRequestBodySize`
+    #or`context#SetMaxRequestBodySize`.
+    PostMaxMemory:               33554432  # 32 << 20 = 32 * 1024 * 1024  =  32MB
+    TranslateFunctionContextKey: "iris.translate"
+    TranslateLanguageContextKey: "iris.language"
+    ViewLayoutContextKey:        "iris.viewLayout"
+    ViewDataContextKey:          "iris.viewData"
+    EnableOptimizations:         false

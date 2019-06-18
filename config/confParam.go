@@ -32,7 +32,7 @@ type CfgStruct struct {
 	Beard    bool        `mapstructure:"beard"`
 	//////////////////////////////////////////////////////////
 	Environment string             `mapstructure:"environment"`
-	Iris        Iris               `mapstructure:"iris"`
+	Iris        map[string]Iris    `mapstructure:"iris"`
 	Database    map[string]Mysql   `mapstructure:"database"`
 	Elastic     map[string]Elastic `mapstructure:"elastic"`
 }
@@ -49,6 +49,8 @@ type Mysql struct {
 }
 
 type Iris struct {
+	Ip                                string `mapstructure:"ip"`
+	Port                              string `mapstructure:"port"`
 	Html                              string `mapstructure:"html"`
 	Upload                            string `mapstructure:"upload"`
 	DisableStartupLog                 bool   `mapstructure:"DisableStartupLog"`

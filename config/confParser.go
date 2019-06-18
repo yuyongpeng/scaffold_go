@@ -84,20 +84,22 @@ func NewVp() {
 
 // 从配置文件获得Iris的配置信息
 func InitIrisConfiguration() (configuration iris.Configuration) {
+	environment := Cfg.Environment
+	cfgIris := Cfg.Iris[environment]
 	defaultConfiguration := iris.DefaultConfiguration()
-	defaultConfiguration.DisableStartupLog = Cfg.Iris.DisableStartupLog
-	defaultConfiguration.DisableInterruptHandler = Cfg.Iris.DisableInterruptHandler
-	defaultConfiguration.DisablePathCorrection = Cfg.Iris.DisablePathCorrection
-	defaultConfiguration.EnablePathEscape = Cfg.Iris.EnablePathEscape
-	defaultConfiguration.FireMethodNotAllowed = Cfg.Iris.FireMethodNotAllowed
-	defaultConfiguration.DisableBodyConsumptionOnUnmarshal = Cfg.Iris.DisableBodyConsumptionOnUnmarshal
-	defaultConfiguration.DisableAutoFireStatusCode = Cfg.Iris.DisableAutoFireStatusCode
-	defaultConfiguration.TimeFormat = Cfg.Iris.TimeFormat
-	defaultConfiguration.Charset = Cfg.Iris.Charset
-	defaultConfiguration.PostMaxMemory = Cfg.Iris.PostMaxMemory
-	defaultConfiguration.TranslateFunctionContextKey = Cfg.Iris.TranslateFunctionContextKey
-	defaultConfiguration.ViewLayoutContextKey = Cfg.Iris.ViewLayoutContextKey
-	defaultConfiguration.ViewDataContextKey = Cfg.Iris.ViewDataContextKey
-	defaultConfiguration.EnableOptimizations = Cfg.Iris.EnableOptimizations
+	defaultConfiguration.DisableStartupLog = cfgIris.DisableStartupLog
+	defaultConfiguration.DisableInterruptHandler = cfgIris.DisableInterruptHandler
+	defaultConfiguration.DisablePathCorrection = cfgIris.DisablePathCorrection
+	defaultConfiguration.EnablePathEscape = cfgIris.EnablePathEscape
+	defaultConfiguration.FireMethodNotAllowed = cfgIris.FireMethodNotAllowed
+	defaultConfiguration.DisableBodyConsumptionOnUnmarshal = cfgIris.DisableBodyConsumptionOnUnmarshal
+	defaultConfiguration.DisableAutoFireStatusCode = cfgIris.DisableAutoFireStatusCode
+	defaultConfiguration.TimeFormat = cfgIris.TimeFormat
+	defaultConfiguration.Charset = cfgIris.Charset
+	defaultConfiguration.PostMaxMemory = cfgIris.PostMaxMemory
+	defaultConfiguration.TranslateFunctionContextKey = cfgIris.TranslateFunctionContextKey
+	defaultConfiguration.ViewLayoutContextKey = cfgIris.ViewLayoutContextKey
+	defaultConfiguration.ViewDataContextKey = cfgIris.ViewDataContextKey
+	defaultConfiguration.EnableOptimizations = cfgIris.EnableOptimizations
 	return defaultConfiguration
 }

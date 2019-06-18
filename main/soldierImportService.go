@@ -38,8 +38,10 @@ import (
 const maxSize = 5 << 20 // 5MB
 
 func main() {
+	environment := config.Cfg.Environment
+	cfgIris := config.Cfg.Iris[environment]
 	app := iris.New()
-	app.RegisterView(iris.HTML(config.Cfg.Iris.Html, ".html"))
+	app.RegisterView(iris.HTML(cfgIris.Html, ".html"))
 	// 初始化Iris的配置
 	//configuration := config.InitIrisConfiguration()
 	//iris.WithConfiguration(configuration)
@@ -139,5 +141,6 @@ func main() {
 		}
 	})
 	//在http//localhost:8080启动服务器，上传限制为5MB。
-	app.Run(iris.Addr(":8085"), iris.WithPostMaxMemory(maxSize))
+	addr := strings.Join([]string{cfgIris.Ip, cfgIris.Port},":")
+	app.Run(iris.Addr(addr), iris.WithPostMaxMemory(maxSize))
 }
