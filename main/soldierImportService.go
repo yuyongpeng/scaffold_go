@@ -105,7 +105,7 @@ func main() {
 		//创建一个具有相同名称的文件
 		//假设你有一个名为'uploads'的文件夹
 		randomStr := utils.Krand(16, utils.KC_RAND_KIND_ALL)
-		filePath := config.Cfg.Iris.Upload + string(randomStr)
+		filePath := cfgIris.Upload + string(randomStr)
 
 		out, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
