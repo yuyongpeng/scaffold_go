@@ -122,7 +122,7 @@ iris:
     EnableOptimizations:         false
   soldier:
     ip: 192.168.0.189
-    port: 8085
+    port: 8086
     web: /HC/GIT/web/views
     upload: /HC/GIT/uploads/
     DisableStartupLog:                 false
