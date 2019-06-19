@@ -1,5 +1,5 @@
 .idea
 uploads
-esImport
-esService
-soldierImportService
+esImport_*
+esService_*
+soldierImportService_*
